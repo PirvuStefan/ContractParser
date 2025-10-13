@@ -65,11 +65,17 @@ public class HelloApplication extends Application {
         stage.setScene(scene);
         stage.show();
         submitButton.setOnAction(e -> {
+
             File imageFile = null;
-            if (imageView.getImage() != null) {
-                imageFile = new File(imageView.getImage().getUrl().replace("file:/", ""));
+            if (imageView.getImage() != null && imageView.getImage().getUrl() != null) {
+                String url = imageView.getImage().getUrl();
+                if (url.startsWith("file:/")) {
+                    imageFile = new File(url.replaceFirst("file:/+", "/"));
+                }
             }
-            if (imageFile != null) {
+            if (imageFile != null && imageFile.exists()) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Form submitted successfully!", ButtonType.OK);
+                alert.showAndWait();
                 extractTextFromImage(imageFile);
             } else {
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Please select an ID image.", ButtonType.OK);
