@@ -75,8 +75,8 @@ public class HelloApplication extends Application {
             }
             if (imageFile != null && imageFile.exists()) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Form submitted successfully!", ButtonType.OK);
-                alert.showAndWait();
                 extractTextFromImage(imageFile);
+                alert.showAndWait();
             } else {
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Please select an ID image.", ButtonType.OK);
                 alert.showAndWait();
