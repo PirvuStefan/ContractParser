@@ -93,10 +93,18 @@ public class HelloApplication extends Application {
         if (selectedFile != null) {
             Image image = new Image(selectedFile.toURI().toString(), 80, 80, true, true);
             imageView.setImage(image);
+            extractTextFromImage(selectedFile);
         }
     }
 
     public static void main(String[] args) {
         launch();
     }
+
+    private void extractTextFromImage(File imageFile) {
+        IDCardService idCardService = new IDCardService();
+        String extractedText = idCardService.extractTextFromImage(imageFile);
+        System.out.println("Extracted Text: " + extractedText);
+    }
 }
+

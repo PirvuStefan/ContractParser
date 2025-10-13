@@ -6,6 +6,7 @@ module org.example.contractparser {
     requires com.dlsc.formsfx;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
+    requires tess4j;
 
     opens org.example.contractparser to javafx.fxml;
     exports org.example.contractparser;
