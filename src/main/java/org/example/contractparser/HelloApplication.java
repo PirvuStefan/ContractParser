@@ -64,6 +64,19 @@ public class HelloApplication extends Application {
 
         stage.setScene(scene);
         stage.show();
+        submitButton.setOnAction(e -> {
+            File imageFile = null;
+            if (imageView.getImage() != null) {
+                imageFile = new File(imageView.getImage().getUrl().replace("file:/", ""));
+            }
+            if (imageFile != null) {
+                extractTextFromImage(imageFile);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Please select an ID image.", ButtonType.OK);
+                alert.showAndWait();
+            }
+        });
+
     }
 
     private String glassButtonStyle() {
@@ -93,7 +106,6 @@ public class HelloApplication extends Application {
         if (selectedFile != null) {
             Image image = new Image(selectedFile.toURI().toString(), 80, 80, true, true);
             imageView.setImage(image);
-            extractTextFromImage(selectedFile);
         }
     }
 

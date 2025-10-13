@@ -12,7 +12,7 @@ public class IDCardService {
         ITesseract tesseract = new Tesseract();
         // Optionally set language and data path:
         // tesseract.setDatapath("/path/to/tessdata");
-        // tesseract.setLanguage("eng");
+         tesseract.setLanguage("eng");
         try {
             return tesseract.doOCR(imageFile);
         } catch (TesseractException e) {
