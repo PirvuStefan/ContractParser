@@ -13,6 +13,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Map;
 
 public class HelloApplication extends Application {
     private ImageView imageView = new ImageView();
@@ -65,6 +67,30 @@ public class HelloApplication extends Application {
         stage.setScene(scene);
         stage.show();
         submitButton.setOnAction(e -> {
+
+            File arhivaDir = new File("arhiva");
+            if (!arhivaDir.exists()) {
+                arhivaDir.mkdir();
+            }
+
+            Contract contract = new Contract();
+            String name = "Andrei_Mihai";
+            File contractFile = new File(arhivaDir, name + ".docx");
+            try {
+                Contract.generateContract(
+                        "src/main/resources/contract.docx",
+                        "output.docx",
+                        Map.of(
+                                "[registration_number]", regNumberField.getText(),
+                                "[phone]", phoneField.getText(),
+                                "[PLACE]", placeField.getText(),
+                                "[city]", cityField.getText(),
+                                "[name]", name
+                        )
+                );
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
 
             File imageFile = null;
             if (imageView.getImage() != null && imageView.getImage().getUrl() != null) {

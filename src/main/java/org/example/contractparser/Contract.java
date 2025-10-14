@@ -1,55 +1,54 @@
 package org.example.contractparser;
-package org.apache.poi.xwpf.usermodel;
+import org.apache.poi.xwpf.usermodel.*;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Map;
 
 public class Contract {
 
+    public static void generateContract(String templatePath, String outputPath, Map<String, String> data) throws IOException {
+        try (FileInputStream fis = new FileInputStream(templatePath);
+             XWPFDocument document = new XWPFDocument(fis)) {
 
-    private File generatedContract(Map< String, String> extractedData) {
-        // Implement contract generation logic here
-        File arhivaDir = new File("arhiva");
-        if (!arhivaDir.exists()) {
-            arhivaDir.mkdirs();
-        }
+            // Replace placeholders in paragraphs
+            for (XWPFParagraph paragraph : document.getParagraphs()) {
+                for (XWPFRun run : paragraph.getRuns()) {
+                    String text = run.getText(0);
+                    if (text != null) {
+                        for (Map.Entry<String, String> entry : data.entrySet()) {
+                            text = text.replace(entry.getKey(), entry.getValue());
+                        }
+                        run.setText(text, 0);
+                    }
+                }
+            }
 
-
-try {
-            File templateFile = new File("contract.docx");
-            File outputFile = new File(arhivaDir, "generated_contract.docx");
-
-            org.apache.poi.xwpf.usermodel.XWPFDocument doc =
-                new org.apache.poi.xwpf.usermodel.XWPFDocument(
-                    new java.io.FileInputStream(templateFile)
-                );
-
-            for (org.apache.poi.xwpf.usermodel.XWPFParagraph p : doc.getParagraphs()) {
-                for (Map.Entry<String, String> entry : extractedData.entrySet()) {
-                    String placeholder = entry.getKey();
-                    String value = entry.getValue();
-                    String text = p.getText();
-                    if (text.contains(placeholder)) {
-                        for (org.apache.poi.xwpf.usermodel.XWPFRun run : p.getRuns()) {
-                            String runText = run.getText(0);
-                            if (runText != null && runText.contains(placeholder)) {
-                                run.setText(runText.replace(placeholder, value), 0);
+            // Replace placeholders in tables too (many contracts use tables)
+            for (XWPFTable table : document.getTables()) {
+                for (XWPFTableRow row : table.getRows()) {
+                    for (XWPFTableCell cell : row.getTableCells()) {
+                        for (XWPFParagraph paragraph : cell.getParagraphs()) {
+                            for (XWPFRun run : paragraph.getRuns()) {
+                                String text = run.getText(0);
+                                if (text != null) {
+                                    for (Map.Entry<String, String> entry : data.entrySet()) {
+                                        text = text.replace(entry.getKey(), entry.getValue());
+                                    }
+                                    run.setText(text, 0);
+                                }
                             }
                         }
                     }
                 }
             }
 
-            try (java.io.FileOutputStream out = new java.io.FileOutputStream(outputFile)) {
-                doc.write(out);
+            // Save the new document
+            try (FileOutputStream fos = new FileOutputStream(outputPath)) {
+                document.write(fos);
             }
-            doc.close();
-            return outputFile;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
         }
-
-        return null;
     }
 }
