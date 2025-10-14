@@ -77,6 +77,9 @@ public class HelloApplication extends Application {
             Contract contract = new Contract();
             String name = "Andrei_Mihai";
             int salary = 4800;
+            String today = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+            String hireday = java.time.LocalDate.now().plusDays(1).format(java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+            System.out.println("Today's date: " + today); // Debugging line
             Map < String, String > placeholders = Map.of(
                     "[registration_number]", regNumberField.getText(),
                     "[phone]", phoneField.getText(),
