@@ -73,39 +73,31 @@ public class HelloApplication extends Application {
                 arhivaDir.mkdir();
             }
 
+
             Contract contract = new Contract();
             String name = "Andrei_Mihai";
+            int salary = 4800;
+            Map < String, String > placeholders = Map.of(
+                    "[registration_number]", regNumberField.getText(),
+                    "[phone]", phoneField.getText(),
+                    "[PLACE]", placeField.getText(),
+                    "[city]", cityField.getText(),
+                    "[name]", name,
+                    "[salary]", Integer.toString(salary)
+            );
             File contractFile = new File(arhivaDir, name + ".docx");
             try {
                 Contract.generateContract(
                         "src/main/resources/contract.docx",
                         "output.docx",
-                        Map.of(
-                                "[registration_number]", regNumberField.getText(),
-                                "[phone]", phoneField.getText(),
-                                "[PLACE]", placeField.getText(),
-                                "[city]", cityField.getText(),
-                                "[name]", name
-                        )
+                        placeholders
                 );
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
 
-            File imageFile = null;
-            if (imageView.getImage() != null && imageView.getImage().getUrl() != null) {
-                String url = imageView.getImage().getUrl();
-                if (url.startsWith("file:/")) {
-                    imageFile = new File(url.replaceFirst("file:/+", "/"));
-                }
-            }
-            if (imageFile != null && imageFile.exists()) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Form submitted successfully!", ButtonType.OK);
-                alert.showAndWait();
-            } else {
-                Alert alert = new Alert(Alert.AlertType.WARNING, "Please select an ID image.", ButtonType.OK);
-                alert.showAndWait();
-            }
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
         });
 
     }
