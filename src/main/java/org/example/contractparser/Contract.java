@@ -23,8 +23,11 @@ public class Contract {
                         }
                         run.setText(text, 0);
                     }
+                    System.out.println(run.getText(0)); // Debugging line to print run text
                 }
             }
+
+            System.out.println("Finished replacing placeholders in paragraphs.\n\n\n\n"); // Debugging line
 
             // Replace placeholders in tables too (many contracts use tables)
             for (XWPFTable table : document.getTables()) {
@@ -39,6 +42,7 @@ public class Contract {
                                     }
                                     run.setText(text, 0);
                                 }
+                                System.out.println(run.getText(0)); // Debugging line to print run text
                             }
                         }
                     }
