@@ -75,7 +75,6 @@ public class HelloApplication extends Application {
             }
             if (imageFile != null && imageFile.exists()) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Form submitted successfully!", ButtonType.OK);
-                extractTextFromImage(imageFile);
                 alert.showAndWait();
             } else {
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Please select an ID image.", ButtonType.OK);
@@ -119,10 +118,5 @@ public class HelloApplication extends Application {
         launch();
     }
 
-    private void extractTextFromImage(File imageFile) {
-        IDCardService idCardService = new IDCardService();
-        String extractedText = idCardService.extractTextFromImage(imageFile);
-        System.out.println("Extracted Text: " + extractedText);
-    }
 }
 
