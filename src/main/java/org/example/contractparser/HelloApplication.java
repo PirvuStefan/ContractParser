@@ -104,6 +104,7 @@ public class HelloApplication extends Application {
                 throw new RuntimeException(ex);
             }
 
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Success");
         });
