@@ -14,7 +14,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 public class DeepSeekOCR {
 
     Dotenv dotenv = Dotenv.load();
-    private static final String API_KEY = System.getenv("DEEPSEEK_API_KEY");;
+    private static final String API_KEY = Dotenv.load().get("DEEPSEEK_API_KEY");
     private static final String API_URL = "https://api.deepseek.com/v1/chat/completions";
 
     public static String extractTextFromImage(String imagePath) {
@@ -55,6 +55,8 @@ public class DeepSeekOCR {
             return "Eroare: " + e.getMessage();
         }
     }
+
+
 
     private static String parseOCRResponse(String jsonResponse) {
         // Parse JSON response to extract text content
