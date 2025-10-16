@@ -73,6 +73,12 @@ public class HelloApplication extends Application {
                 arhivaDir.mkdir();
             }
 
+            String extractedText = DeepSeekOCR.extractTextFromImage(imageView.getImage().getUrl());
+            System.out.println(extractedText);
+            System.out.println(arhivaDir.getAbsolutePath());
+            System.out.println("\n\n\n\n");
+
+
 
             Contract contract = new Contract();
             String name = "Andrei_Mihai";

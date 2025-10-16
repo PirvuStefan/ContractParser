@@ -7,6 +7,8 @@ module org.example.contractparser {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires org.apache.poi.ooxml;
+    requires java.net.http;
+    requires io.github.cdimascio.dotenv.java;
 
     opens org.example.contractparser to javafx.fxml;
     exports org.example.contractparser;
