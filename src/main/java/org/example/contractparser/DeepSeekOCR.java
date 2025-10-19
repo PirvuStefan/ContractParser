@@ -4,9 +4,20 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
+
+import com.google.cloud.vision.v1.AnnotateImageRequest;
+import com.google.cloud.vision.v1.AnnotateImageResponse;
+import com.google.cloud.vision.v1.Feature;
+import com.google.cloud.vision.v1.Image;
+import com.google.cloud.vision.v1.ImageAnnotatorClient;
+import com.google.protobuf.ByteString;
+
+// AIzaSyB78GoqSTrfVM7JDrnL7VzkgnWnhSAmUjE
 
 import io.github.cdimascio.dotenv.Dotenv;
 
@@ -17,56 +28,28 @@ public class DeepSeekOCR {
     private static final String API_KEY = Dotenv.load().get("DEEPSEEK_API_KEY");
     private static final String API_URL = "https://api.deepseek.com/v1/chat/completions";
 
-    public static String extractTextFromImage(String imagePath) {
+    public static String extractTextWithGoogleVision(String imagePath) {
         try {
-            // Encode image to base64
-            String filePath = imagePath.startsWith("file:/") ? imagePath.replace("file:/", "") : imagePath;
-            byte[] imageBytes = Files.readAllBytes(Paths.get(filePath));
+            ByteString imgBytes = ByteString.readFrom(Files.newInputStream(Paths.get(imagePath)));
 
-            String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+            List<AnnotateImageRequest> requests = new ArrayList<>();
+            Image img = Image.newBuilder().setContent(imgBytes).build();
+            Feature feat = Feature.newBuilder().setType(Feature.Type.TEXT_DETECTION).build();
+            AnnotateImageRequest request =
+                    AnnotateImageRequest.newBuilder().addFeatures(feat).setImage(img).build();
+            requests.add(request);
 
-            String requestBody = String.format(
-                    "{" +
-                            "\"model\": \"deepseek-chat\"," +
-                            "\"messages\": [{" +
-                            "\"role\": \"user\"," +
-                            "\"content\": [" +
-                            "{\"type\": \"text\", \"text\": \"Extrage toate informațiile text din această imagine. Răspunde doar cu textul extras.\"}," +
-                            "{\"type\": \"image_url\", \"image_url\": {\"url\": \"data:image/png;base64,%s\"}}" +
-                            "]" +
-                            "}]," +
-                            "\"max_tokens\": 1000" +
-                            "}",
-                    base64Image
-            );
-
-            HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(API_URL))
-                    .header("Content-Type", "application/json")
-                    .header("Authorization", "Bearer " + API_KEY)
-                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
-                    .build();
-
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            return response.body();
-
+            try (ImageAnnotatorClient client = ImageAnnotatorClient.create()) {
+                AnnotateImageResponse response = client.batchAnnotateImages(requests)
+                        .getResponsesList().get(0);
+                if (response.hasError()) {
+                    return "Error: " + response.getError().getMessage();
+                }
+                return response.getFullTextAnnotation().getText();
+            }
         } catch (Exception e) {
-            return "Eroare: " + e.getMessage();
+            return "Error: " + e.getMessage();
         }
+
     }
-
-
-
-    private static String parseOCRResponse(String jsonResponse) {
-        // Parse JSON response to extract text content
-        // Implementare simplificată - recomand Jackson pentru parsing detaliat
-        if (jsonResponse.contains("\"content\"")) {
-            int start = jsonResponse.indexOf("\"content\":\"") + 11;
-            int end = jsonResponse.indexOf("\"", start);
-            return jsonResponse.substring(start, end).replace("\\n", "\n");
-        }
-        return "Text negăsit în răspuns";
-    }
-
 }
