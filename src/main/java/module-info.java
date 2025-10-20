@@ -10,6 +10,7 @@ module org.example.contractparser {
     requires java.net.http;
     requires io.github.cdimascio.dotenv.java;
     requires proto.google.cloud.vision.v1;
+    requires google.cloud.vision;
 
     opens org.example.contractparser to javafx.fxml;
     exports org.example.contractparser;
