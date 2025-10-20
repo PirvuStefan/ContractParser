@@ -73,7 +73,12 @@ public class HelloApplication extends Application {
                 arhivaDir.mkdir();
             }
 
-            String extractedText = GoogleVisionOCR.extractTextWithGoogleVision(imageView.getImage().getUrl());
+            String extractedText = null;
+            try {
+                DetectText.detectText(imageView.getImage().getUrl());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
             System.out.println(extractedText);
             System.out.println(arhivaDir.getAbsolutePath());
             System.out.println("\n\n\n\n");
