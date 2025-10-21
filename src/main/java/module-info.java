@@ -12,8 +12,6 @@ module org.example.contractparser {
     //requires proto.google.cloud.vision.v1;
     //requires google.cloud.vision;
     requires protobuf.java;
-    requires proto.google.cloud.vision.v1;
-    requires google.cloud.vision;
 
     opens org.example.contractparser to javafx.fxml;
     exports org.example.contractparser;
