@@ -74,6 +74,7 @@ public class HelloApplication extends Application {
             }
 
             String extractedText = null;
+            DetectText.main(new String[]{}, new File(imageView.getImage().getUrl().substring(6)));
 
             System.out.println(extractedText);
             System.out.println(arhivaDir.getAbsolutePath());

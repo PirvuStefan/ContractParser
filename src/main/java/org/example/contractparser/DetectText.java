@@ -1,6 +1,8 @@
 package org.example.contractparser;
 
-import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
+import io.github.cdimascio.dotenv.Dotenv;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.textract.TextractClient;
@@ -16,18 +18,32 @@ import java.util.List;
 public class DetectText {
 
     private final TextractClient textractClient;
+    private final Dotenv dotenv;
 
     public DetectText() {
+        this.dotenv = Dotenv.load();
+        String awsAccessKeyId = dotenv.get("AWS_ACCESS_KEY_ID");
+        String awsSecretAccessKey = dotenv.get("AWS_SECRET_ACCESS_KEY");
+        String awsRegion = dotenv.get("AWS_REGION") != null ? dotenv.get("AWS_REGION") : "us-east-1";
+
+        AwsBasicCredentials awsCredentials = AwsBasicCredentials.create(awsAccessKeyId, awsSecretAccessKey);
+
         this.textractClient = TextractClient.builder()
-                .region(Region.US_EAST_1) // Change to your preferred region
-                .credentialsProvider(ProfileCredentialsProvider.create())
+                .region(Region.of(awsRegion))
+                .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
                 .build();
     }
 
     public DetectText(Region region) {
+        this.dotenv = Dotenv.load();
+        String awsAccessKeyId = dotenv.get("AWS_ACCESS_KEY_ID");
+        String awsSecretAccessKey = dotenv.get("AWS_SECRET_ACCESS_KEY");
+
+        AwsBasicCredentials awsCredentials = AwsBasicCredentials.create(awsAccessKeyId, awsSecretAccessKey);
+
         this.textractClient = TextractClient.builder()
                 .region(region)
-                .credentialsProvider(ProfileCredentialsProvider.create())
+                .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
                 .build();
     }
 
@@ -180,11 +196,11 @@ public class DetectText {
     /**
      * Example usage
      */
-    public static void main(String[] args) {
+    public static void main(String[] args, File imageFile) {
         DetectText detector = new DetectText();
 
         try {
-            String imagePath = "path/to/your/image.jpg";
+            String imagePath = imageFile.getAbsolutePath();
 
             // Extract text as a single string
             String extractedText = detector.extractText(imagePath);
