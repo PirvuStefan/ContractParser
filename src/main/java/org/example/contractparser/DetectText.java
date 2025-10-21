@@ -200,7 +200,7 @@ public class DetectText {
         DetectText detector = new DetectText();
 
         try {
-            String imagePath = imageFile.getAbsolutePath();
+            String imagePath = imageFile.getAbsolutePath().replaceFirst("^file:", "");
 
             // Extract text as a single string
             String extractedText = detector.extractText(imagePath);
