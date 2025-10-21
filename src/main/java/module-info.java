@@ -11,7 +11,10 @@ module org.example.contractparser {
     requires io.github.cdimascio.dotenv.java;
     //requires proto.google.cloud.vision.v1;
     //requires google.cloud.vision;
-    requires protobuf.java;
+    requires software.amazon.awssdk.services.textract;
+    requires software.amazon.awssdk.core;
+    requires software.amazon.awssdk.regions;
+    requires software.amazon.awssdk.auth;
 
     opens org.example.contractparser to javafx.fxml;
     exports org.example.contractparser;
