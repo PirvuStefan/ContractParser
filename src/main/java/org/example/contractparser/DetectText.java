@@ -21,7 +21,7 @@ public class DetectText {
     private final Dotenv dotenv;
 
     public DetectText() {
-        this.dotenv = Dotenv.load();
+        this.dotenv = Dotenv.load();//
         String awsAccessKeyId = dotenv.get("AWS_ACCESS_KEY_ID");
         String awsSecretAccessKey = dotenv.get("AWS_SECRET_ACCESS_KEY");
         String awsRegion = dotenv.get("AWS_REGION") != null ? dotenv.get("AWS_REGION") : "us-east-1";
@@ -47,12 +47,7 @@ public class DetectText {
                 .build();
     }
 
-    /**
-     * Extracts text from an image file using Amazon Textract
-     * @param imagePath Path to the image file
-     * @return Extracted text as a single string
-     * @throws IOException If file reading fails
-     */
+
     public String extractText(String imagePath) throws IOException {
         File imageFile = new File(imagePath);
 
@@ -82,12 +77,7 @@ public class DetectText {
         }
     }
 
-    /**
-     * Extracts text and returns it as a list of lines
-     * @param imagePath Path to the image file
-     * @return List of extracted text lines
-     * @throws IOException If file reading fails
-     */
+
     public List<String> extractTextLines(String imagePath) throws IOException {
         File imageFile = new File(imagePath);
         List<String> lines = new ArrayList<>();
@@ -115,12 +105,7 @@ public class DetectText {
         return lines;
     }
 
-    /**
-     * Extracts text with detailed information including confidence scores
-     * @param imagePath Path to the image file
-     * @return List of TextBlock objects containing text and metadata
-     * @throws IOException If file reading fails
-     */
+
     public List<TextBlock> extractTextWithDetails(String imagePath) throws IOException {
         File imageFile = new File(imagePath);
         List<TextBlock> textBlocks = new ArrayList<>();
@@ -152,18 +137,14 @@ public class DetectText {
         return textBlocks;
     }
 
-    /**
-     * Close the Textract client
-     */
+
     public void close() {
         if (textractClient != null) {
             textractClient.close();
         }
     }
 
-    /**
-     * Inner class to hold text block information
-     */
+
     public static class TextBlock {
         private final String text;
         private final Float confidence;
@@ -193,9 +174,7 @@ public class DetectText {
         }
     }
 
-    /**
-     * Example usage
-     */
+
     public static void main(String[] args, File imageFile) {
         DetectText detector = new DetectText();
 
