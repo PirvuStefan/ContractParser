@@ -159,6 +159,10 @@ public class DetectText {
                 word = word.trim();
                 textMap.put("seria", word.substring(0,2));
                 textMap.put("nr", word.substring(2,7));
+                // here we can also put the cnp if needed
+                textMap.put("cnp", getCNP(word));
+
+
                 System.out.println("Seria este: " + word.substring(0,2));
                 System.out.println("Numarul este: " + word.substring(2,8));
 
@@ -179,6 +183,16 @@ public class DetectText {
         word = word.substring(5);
         word = word.replaceAll("<+", " ").trim();
         word = word.replaceAll("\\s+", " ");
+        return word;
+
+    }
+
+    private String getCNP(String word){
+        word = word.trim();
+        char c = word.charAt(word.length() - 1);
+        // AX839941<58009702248M310803310126561
+        word = c + word.substring(13,19) + word.substring(29,35);
+        System.out.println(" CNP este: " + word);
         return word;
 
     }
