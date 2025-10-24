@@ -82,8 +82,6 @@ public class HelloApplication extends Application {
             System.out.println("\n\n\n\n");
 
 
-
-            Contract contract = new Contract();
             String name = "Andrei_Mihai";
             int salary = 4800;
             String today = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy"));
@@ -92,16 +90,22 @@ public class HelloApplication extends Application {
             phone = phone.replaceAll("(\\d{4})(\\d{3})(\\d{3})", "$1 $2 $3");
             System.out.println(phone); // Debugging line
             System.out.println("Today's date: " + today); // Debugging line
-            Map < String, String > placeholders = Map.of(
-                    "registration_number", regNumberField.getText(),
-                    "today", today,
-                    "hireday", hireday,
-                    "phone", phoneField.getText(),
-                    "place", placeField.getText(),
-                    "city", cityField.getText(),
-                    "name", name,
-                    "salary", Integer.toString(salary)
-            );
+//            Map < String, String > placeholders = Map.of(
+//                    "registration_number", regNumberField.getText(),
+//                    "today", today,
+//                    "hireday", hireday,
+//                    "phone", phoneField.getText(),
+//                    "place", placeField.getText(),
+//                    "city", cityField.getText(),
+//                    "name", name,
+//                    "salary", Integer.toString(salary)
+//            );
+            Map<String, String> placeholders;
+            try {
+                placeholders = new DetectText().extractMap(imagePath);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
             File contractFile = new File(arhivaDir, name + ".docx");
             try {
                 Contract.generateContract(

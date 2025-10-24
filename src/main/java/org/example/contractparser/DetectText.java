@@ -113,7 +113,7 @@ public class DetectText {
     }
 
 
-    public List<TextBlock> extractTextWithDetails(String imagePath) throws IOException {
+    private List<TextBlock> extractTextWithDetails(String imagePath) throws IOException {
         File imageFile = new File(imagePath);
         List<TextBlock> textBlocks = new ArrayList<>();
 
@@ -149,10 +149,35 @@ public class DetectText {
         int wordNumber = 1;
 
         List < String> textBlocks = DetectText.this.extractTextLines(imagePath);
+        for (String word : textBlocks) {
+            if(word.contains("<<")){
+                textMap.put("name", getName(word));
+                System.out.println("Numele este: " + getName(word));
+
+            }
+        }
 
 
         return textMap;
     }
+
+    private String getName(String word){
+        word = word.substring(5);
+        for(int i=0;i<word.length();i++){
+            if(word.charAt(i) == '<' &&  checkLetter(word.charAt(i+1)) ){
+                word = word.substring(0, i) + " ";
+            }
+
+        }
+        word = word.replaceAll("<", "");
+        return word;
+
+    }
+
+    private boolean checkLetter(char c) {
+        return Character.isLetter(c);
+    }
+
 
 
     public void close() {
