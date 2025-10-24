@@ -163,13 +163,8 @@ public class DetectText {
 
     private String getName(String word){
         word = word.substring(5);
-        for(int i=0;i<word.length();i++){
-            if(word.charAt(i) == '<' &&  checkLetter(word.charAt(i+1)) ){
-                word = word.substring(0, i) + " ";
-            }
-
-        }
-        word = word.replaceAll("<", "");
+        word = word.replaceAll("<+", " ").trim();
+        word = word.replaceAll("\\s+", " ");
         return word;
 
     }
@@ -224,8 +219,7 @@ public class DetectText {
             String imagePath = imageFile.getAbsolutePath().replaceFirst("^file:", "");
 
             // Extract text as a single string
-            String extractedText = detector.extractText(imagePath);
-            System.out.println("Extracted Text:\n" + extractedText);
+
 
             // Extract text as lines
             List<String> lines = detector.extractTextLines(imagePath);
@@ -233,9 +227,9 @@ public class DetectText {
             lines.forEach(System.out::println);
 
             // Extract with details
-            List<TextBlock> blocks = detector.extractTextWithDetails(imagePath);
-            System.out.println("\nDetailed Extraction:");
-            blocks.forEach(System.out::println);
+//            List<TextBlock> blocks = detector.extractTextWithDetails(imagePath);
+//            System.out.println("\nDetailed Extraction:");
+//            blocks.forEach(System.out::println);
 
         } catch (IOException e) {
             System.err.println("Error extracting text: " + e.getMessage());
