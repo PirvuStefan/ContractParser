@@ -163,6 +163,12 @@ public class DetectText {
                 System.out.println("Numarul este: " + word.substring(2,8));
 
             }
+            else if(word.contains("SPCLEP")){
+                word = word.trim();
+                textMap.put("issued",word);
+                System.out.println("Eliberat de: " + word);
+
+            }
         }
 
 
