@@ -155,6 +155,14 @@ public class DetectText {
                 System.out.println("Numele este: " + getName(word));
 
             }
+            else if(word.contains("<")){
+                word = word.trim();
+                textMap.put("seria", word.substring(0,2));
+                textMap.put("nr", word.substring(2,7));
+                System.out.println("Seria este: " + word.substring(0,2));
+                System.out.println("Numarul este: " + word.substring(2,8));
+
+            }
         }
 
 
