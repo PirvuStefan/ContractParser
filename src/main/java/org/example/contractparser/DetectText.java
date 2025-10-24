@@ -13,7 +13,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DetectText {
 
@@ -97,7 +99,12 @@ public class DetectText {
 
             for (Block block : response.blocks()) {
                 if (block.blockType() == BlockType.LINE) {
-                    lines.add(block.text());
+                    String[] words = block.text().trim().split("\\s+");
+                    for (String word : words) {
+                        if (!word.isBlank()) {
+                            lines.add(word);
+                        }
+                    }
                 }
             }
         }
@@ -135,6 +142,16 @@ public class DetectText {
         }
 
         return textBlocks;
+    }
+
+    public Map<String, String> extractMap(String imagePath) throws IOException {
+        Map<String, String> textMap = new HashMap<>();
+        int wordNumber = 1;
+
+        List < String> textBlocks = DetectText.this.extractTextLines(imagePath);
+
+
+        return textMap;
     }
 
 
