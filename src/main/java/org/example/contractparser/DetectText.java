@@ -99,12 +99,11 @@ public class DetectText {
 
             for (Block block : response.blocks()) {
                 if (block.blockType() == BlockType.LINE) {
-                    String[] words = block.text().trim().split("\\s+");
-                    for (String word : words) {
-                        if (!word.isBlank()) {
-                            lines.add(word);
-                        }
-                    }
+                   String lineText = block.text().trim();
+                if (!lineText.isEmpty()) {
+                    lines.add(lineText);
+                }
+
                 }
             }
         }
@@ -147,9 +146,12 @@ public class DetectText {
     public Map<String, String> extractMap(String imagePath) throws IOException {
         Map<String, String> textMap = new HashMap<>();
         int wordNumber = 1;
+        int count = 0;
 
         List < String> textBlocks = DetectText.this.extractTextLines(imagePath);
-        for (String word : textBlocks) {
+        for (int i = 0; i < textBlocks.size(); i++) {
+            String word = textBlocks.get(i).trim();
+
             if(word.contains("<<")){
                 textMap.put("name", getName(word));
                 System.out.println("Numele este: " + getName(word));
@@ -172,6 +174,13 @@ public class DetectText {
                 textMap.put("issued",word);
                 System.out.println("Eliberat de: " + word);
 
+            }
+            else if(word.contains("Adresse") || word.contains("Adress") || word.contains("Domiciliu")){
+                String adress1 = textBlocks.get(i+1).trim();
+                String adress2 = textBlocks.get(i+2).trim();
+                System.out.println("Adresa este: " + adress1 + " " + adress2);
+                textMap.put("address", adress1 + " " + adress2);
+                i = i + 2;
             }
         }
 
