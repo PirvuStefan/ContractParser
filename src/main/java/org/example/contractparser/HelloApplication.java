@@ -26,6 +26,13 @@ public class HelloApplication extends Application {
     // Java
     @Override
     public void start(Stage stage) {
+
+        try {
+            ConfigToJarDir.main(new String[]{});
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+
         stage.setTitle("ContractParser");
 
         Label imageLabel = new Label("ID Image (JPG/PNG):");
@@ -87,6 +94,7 @@ public class HelloApplication extends Application {
 
 
             String name = "Andrei_Mihai";
+
 
             int salary;
             Path configPath = Paths.get("config.yml");
