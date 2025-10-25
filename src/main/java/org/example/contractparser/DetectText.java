@@ -184,8 +184,12 @@ public class DetectText {
             }
             else if(word.contains("Valabilitate") || word.contains("Validity") || word.contains("Validite")){
                 String date = textBlocks.get(i+2).trim();
+                int dashIndex = date.indexOf('-');
+                if (dashIndex != -1) {
+                    date = date.substring(0, dashIndex).trim();
+                }
                 System.out.println("Data este: " + date);
-                textMap.put("em_date", date);
+                textMap.put("em_data", date);
             }
         }
 
