@@ -159,10 +159,10 @@ public class DetectText {
             }
             else if(word.contains("<")){
                 word = word.trim();
-                textMap.put("seria", word.substring(0,2));
-                textMap.put("nr", word.substring(2,7));
+                textMap.put("series", word.substring(0,2));
+                textMap.put("num", word.substring(2,7));
                 // here we can also put the cnp if needed
-                textMap.put("cnp", getCNP(word));
+                textMap.put("cnpc", getCNP(word));
 
 
                 System.out.println("Seria este: " + word.substring(0,2));
@@ -181,6 +181,11 @@ public class DetectText {
                 System.out.println("Adresa este: " + adress1 + " " + adress2);
                 textMap.put("address", adress1 + " " + adress2);
                 i = i + 2;
+            }
+            else if(word.contains("Valabilitate") || word.contains("Validity") || word.contains("Validite")){
+                String date = textBlocks.get(i+2).trim();
+                System.out.println("Data este: " + date);
+                textMap.put("em_date", date);
             }
         }
 

@@ -14,6 +14,10 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 
 public class HelloApplication extends Application {
@@ -83,7 +87,40 @@ public class HelloApplication extends Application {
 
 
             String name = "Andrei_Mihai";
-            int salary = 4800;
+
+            int salary;
+            Path configPath = Paths.get("config.yml");
+            if(!Files.exists(configPath)) {
+                try {
+                    Files.createFile(configPath);
+                    Files.write(configPath, List.of("salary: 4800"));
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+            try {
+                if (Files.exists(configPath)) {
+                    List<String> lines = Files.readAllLines(configPath);
+                    salary = 4800; // default
+                    for (String l : lines) {
+                        String trimmed = l.trim();
+                        if (trimmed.startsWith("salary:")) {
+                            String val = trimmed.substring("salary:".length()).trim();
+                            val = val.replaceAll("^['\"]|['\"]$", "");
+                            try {
+                                salary = Integer.parseInt(val);
+                            } catch (NumberFormatException ignored) {
+                            }
+                            break;
+                        }
+                    }
+                } else {
+                    salary = 4800; // default if config missing
+                }
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+
             String today = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy"));
             String hireday = java.time.LocalDate.now().plusDays(1).format(java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy"));
             String phone = phoneField.getText();
@@ -106,6 +143,12 @@ public class HelloApplication extends Application {
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
+            placeholders.put("registration_number", regNumberField.getText());
+            placeholders.put("today", today);
+            placeholders.put("hireday", hireday);
+            placeholders.put("phone", phone);
+            placeholders.put("place", placeField.getText());
+            placeholders.put("city", cityField.getText());
             File contractFile = new File(arhivaDir, name + ".docx");
             try {
                 Contract.generateContract(
