@@ -120,7 +120,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>org.example.contractparser.Main</mainClass>
+                            <mainClass>org.example.contractparser.Launcher</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
