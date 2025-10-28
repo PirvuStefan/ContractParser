@@ -17,25 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/// TODO: Define the following symbols in the contract template and replace them with extracted values:
-// because using one word for each field can lead to errors if the apache poi splits a word in two or some other issue
-
-//        ❖ (for NAME)
-//        ✦ (for REGISTRATION_NUMBER)
-//        ✱ (for TODAY)
-//        ◆ (for HIREDAY)
-//        ☼ (for PHONE)
-//        ✿ (for PLACE)
-//        ▶ (for CITY)
-//        ◀ (for SALARY)
-//        〈 (for CONTRACT_ID)
-//        〉 (for ISSUER)
-//        ✚ (for DOCUMENT_DATE)
-//        ❂ (for SIGNATURE)
-//        ✪ (for NOTE)
-//        ✧ (for ROLE)
-//        ◉ (for ADDITIONAL_FIELD)
-
 
 
 
