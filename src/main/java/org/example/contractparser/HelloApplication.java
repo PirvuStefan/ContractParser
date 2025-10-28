@@ -133,6 +133,8 @@ public class HelloApplication extends Application {
             String hireday = java.time.LocalDate.now().plusDays(1).format(java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy"));
             String phone = phoneField.getText();
             phone = phone.replaceAll("(\\d{4})(\\d{3})(\\d{3})", "$1 $2 $3");
+
+            // this should be the palceholder for salary :  ɥ
             System.out.println(phone); // Debugging line
             System.out.println("Today's date: " + today); // Debugging line
 //            Map < String, String > placeholders = Map.of(
@@ -151,12 +153,12 @@ public class HelloApplication extends Application {
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-            placeholders.put("registration_number", regNumberField.getText());
-            placeholders.put("today", today);
-            placeholders.put("hireday", hireday);
-            placeholders.put("phone", phone);
-            placeholders.put("place", placeField.getText());
-            placeholders.put("city", cityField.getText());
+            placeholders.put("ɔ", regNumberField.getText());
+            placeholders.put("ɖ", today);
+            placeholders.put("ɐ", hireday);
+            placeholders.put("ɕ", phone);
+            placeholders.put("ɘ", placeField.getText());
+            placeholders.put("ə", cityField.getText());
             File contractFile = new File(arhivaDir, name + ".docx");
             try {
                 Contract.generateContract(

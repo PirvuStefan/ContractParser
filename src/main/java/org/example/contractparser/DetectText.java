@@ -175,16 +175,16 @@ public class DetectText {
             String word = textBlocks.get(i).trim();
 
             if(word.contains("<<")){
-                textMap.put("name", getName(word));
+                textMap.put("ɛ", getName(word));
                 System.out.println("Numele este: " + getName(word));
 
             }
             else if(word.contains("<")){
                 word = word.trim();
-                textMap.put("series", word.substring(0,2));
-                textMap.put("num", word.substring(2,7));
+                textMap.put("ɜ", word.substring(0,2));
+                textMap.put("ɝ", word.substring(2,7));
                 // here we can also put the cnp if needed
-                textMap.put("cnpc", getCNP(word));
+                textMap.put("ɞ", getCNP(word));
 
 
                 System.out.println("Seria este: " + word.substring(0,2));
@@ -193,7 +193,7 @@ public class DetectText {
             }
             else if(word.contains("SPCLEP")){
                 word = word.trim();
-                textMap.put("issued",word);
+                textMap.put("ɟ",word);
                 System.out.println("Eliberat de: " + word);
 
             }
@@ -201,7 +201,7 @@ public class DetectText {
                 String adress1 = textBlocks.get(i+1).trim();
                 String adress2 = textBlocks.get(i+2).trim();
                 System.out.println("Adresa este: " + adress1 + " " + adress2);
-                textMap.put("address", adress1 + " " + adress2);
+                textMap.put("ɠ", adress1 + " " + adress2);
                 i = i + 2;
             }
             else if(word.contains("Valabilitate") || word.contains("Validity") || word.contains("Validite")){
@@ -211,7 +211,7 @@ public class DetectText {
                     date = date.substring(0, dashIndex).trim();
                 }
                 System.out.println("Data este: " + date);
-                textMap.put("em_data", date);
+                textMap.put("ɣ", date);
             }
         }
 
