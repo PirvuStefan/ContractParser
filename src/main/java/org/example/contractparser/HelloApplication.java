@@ -187,31 +187,9 @@ public class HelloApplication extends Application {
             placeholders.put("ɥ", salaryStr);
             File contractFile = new File(arhivaDir, name + ".docx");
             showReviewPage(placeholders, regNumberField.getText(),phone, placeField.getText(),cityField.getText());
-//            try {
-//                Contract.generateContract(
-//                        "src/main/resources/contract.docx",
-//                        "output.docx",
-//                        placeholders
-//                );
-//            } catch (IOException ex) {
-//                throw new RuntimeException(ex);
-//            }
-//
-//            try {
-//                Contract.generateContract(
-//                        "src/main/resources/fisa.docx",
-//                        "output2.docx",
-//                        placeholders
-//                );
-//            } catch (IOException ex) {
-//                throw new RuntimeException(ex);
-//            }
-
-            showReviewPage(placeholders, regNumberField.getText(),phone, placeField.getText(),cityField.getText());
 
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Success");
+
         });
 
     }
@@ -343,16 +321,29 @@ public class HelloApplication extends Application {
 
             String name = nameField.getText().replace(" ", "_");
             File arhivaDir = new File("arhiva");
+            if (!arhivaDir.exists()) {
+                arhivaDir.mkdir();
+            }
+            File contractFile = null;
+            File fisaFile = null;
+            try {
+                contractFile = new File(arhivaDir, name + ".docx");
+                fisaFile = new File(arhivaDir, name + "_fisa.docx");
+                if (!contractFile.exists()) contractFile.createNewFile();
+                if (!fisaFile.exists()) fisaFile.createNewFile();
+            } catch (IOException ex) {
+
+            }
 
             try {
                 Contract.generateContract(
                         "src/main/resources/contract.docx",
-                        "output.docx",
+                        contractFile.getAbsolutePath(),
                         extractedData
                 );
                 Contract.generateContract(
                         "src/main/resources/fisa.docx",
-                        "output2.docx",
+                        fisaFile.getAbsolutePath(),
                         extractedData
                 );
 
@@ -361,6 +352,7 @@ public class HelloApplication extends Application {
                 alert.setHeaderText("Contracts Generated");
                 alert.setContentText("Contract and Fisa have been successfully created!");
                 alert.showAndWait();
+                start(primaryStage); // return to main page after creation
 
             } catch (IOException ex) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
