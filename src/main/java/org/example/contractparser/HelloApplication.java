@@ -84,8 +84,8 @@ public class HelloApplication extends Application {
                 arhivaDir.mkdir();
             }
 
-            String imagePath = imageView.getImage().getUrl().replaceFirst("^file:", "");
-            DetectText.main(new String[]{}, new File(imagePath));
+
+//            DetectText.main(new String[]{}, new File(imagePath));
 
 
             String name = "Andrei_Mihai";
@@ -132,22 +132,51 @@ public class HelloApplication extends Application {
             // this should be the palceholder for salary :  ɥ
             System.out.println(phone); // Debugging line
             System.out.println("Today's date: " + today); // Debugging line
-//            Map < String, String > placeholders = Map.of(
-//                    "registration_number", regNumberField.getText(),
-//                    "today", today,
-//                    "hireday", hireday,
-//                    "phone", phoneField.getText(),
-//                    "place", placeField.getText(),
-//                    "city", cityField.getText(),
-//                    "name", name,
-//                    "salary", Integer.toString(salary)
-//            );
-            Map<String, String> placeholders;
-            try {
-                placeholders = new DetectText().extractMap(imagePath);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
+            Map<String, String> placeholders = new java.util.HashMap<>();
+
+            if(imageView.getImage()!=null) {
+                try {
+                    String imagePath = imageView.getImage().getUrl().replaceFirst("^file:", "");
+                    placeholders = new DetectText().extractMap(imagePath);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+
             }
+
+            if (regNumberField.getText() == null || regNumberField.getText().trim().isEmpty()) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Numarul de inregistrare lipsa");
+                    alert.setContentText("Te rog introdu numarul de inregistrare.");
+                    alert.showAndWait();
+                    return;
+                }
+                if (phoneField.getText() == null || phoneField.getText().trim().isEmpty()) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Numarul de telefon lipsa");
+                    alert.setContentText("Te rog introdu numarul de telefon.");
+                    alert.showAndWait();
+                    return;
+                }
+                if (placeField.getText() == null || placeField.getText().trim().isEmpty()) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Locatia lipsa");
+                    alert.setContentText("Te rog introdu locatia.");
+                    alert.showAndWait();
+                    return;
+                }
+                if (cityField.getText() == null || cityField.getText().trim().isEmpty()) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Orasul lipsa");
+                    alert.setContentText("Te rog introdu orasul.");
+                    alert.showAndWait();
+                    return;
+                }
+
             String salaryStr = Integer.toString(salary);
             placeholders.put("ɔ", regNumberField.getText());
             placeholders.put("ɖ", today);
@@ -157,6 +186,7 @@ public class HelloApplication extends Application {
             placeholders.put("ə", cityField.getText());
             placeholders.put("ɥ", salaryStr);
             File contractFile = new File(arhivaDir, name + ".docx");
+            showReviewPage(placeholders, regNumberField.getText(),phone, placeField.getText(),cityField.getText());
 //            try {
 //                Contract.generateContract(
 //                        "src/main/resources/contract.docx",
@@ -213,7 +243,7 @@ public class HelloApplication extends Application {
         if (selectedFile != null) {
             Image image = new Image(selectedFile.toURI().toString(), 80, 80, true, true);
             imageView.setImage(image);
-        }
+        };
     }
 
     private void showReviewPage(Map<String, String> extractedData, String regNumber,
