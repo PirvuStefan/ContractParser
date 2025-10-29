@@ -1,7 +1,9 @@
 package org.example.contractparser;
 
+import javafx.application.Application;
+
 public class Launcher {
        public static void main(String[] args) {
-           javafx.application.Application.launch(HelloApplication.class, args);
+           Application.launch(HelloApplication.class, args);
        }
    }
