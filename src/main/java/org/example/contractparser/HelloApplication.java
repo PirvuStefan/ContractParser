@@ -86,6 +86,7 @@ public class HelloApplication extends Application {
 
 
 //            DetectText.main(new String[]{}, new File(imagePath));
+            // lets see what we have here
 
 
             String name = "Andrei_Mihai";
