@@ -389,17 +389,26 @@ public class HelloApplication extends Application {
 
             }
 
+
+
             try {
-                Contract.generateContract(
-                        "src/main/resources/contract.docx",
-                        contractFile.getAbsolutePath(),
-                        extractedData
-                );
-                Contract.generateContract(
-                        "src/main/resources/fisa.docx",
-                        fisaFile.getAbsolutePath(),
-                        extractedData
-                );
+                try (java.io.InputStream tmplIs = HelloApplication.class.getResourceAsStream("/contract.docx");
+                     java.io.InputStream fisaIs = HelloApplication.class.getResourceAsStream("/fisa.docx")) {
+
+                    if (tmplIs == null) throw new IOException("Resource `/contract.docx` not found in JAR");
+                    if (fisaIs == null) throw new IOException("Resource `/fisa.docx` not found in JAR");
+
+                    File tmpTemplate = File.createTempFile("contract_template", ".docx");
+                    tmpTemplate.deleteOnExit();
+                    Files.copy(tmplIs, tmpTemplate.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+
+                    File tmpFisa = File.createTempFile("fisa_template", ".docx");
+                    tmpFisa.deleteOnExit();
+                    Files.copy(fisaIs, tmpFisa.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+
+                    Contract.generateContract(tmpTemplate.getAbsolutePath(), contractFile.getAbsolutePath(), extractedData);
+                    Contract.generateContract(tmpFisa.getAbsolutePath(), fisaFile.getAbsolutePath(), extractedData);
+                }
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Success");
@@ -415,6 +424,8 @@ public class HelloApplication extends Application {
                 alert.setContentText(ex.getMessage());
                 alert.showAndWait();
             }
+
+
         });
 
         HBox buttonBox = new HBox(15, backButton, createButton);
