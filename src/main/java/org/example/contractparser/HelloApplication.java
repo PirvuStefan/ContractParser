@@ -412,8 +412,8 @@ public class HelloApplication extends Application {
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Success");
-                alert.setHeaderText("Contracts Generated");
-                alert.setContentText("Contract and Fisa have been successfully created!");
+                alert.setHeaderText("Contracte generate");
+                alert.setContentText("Contractul si Fisa au fost generate cu succes in folderul 'arhiva'.");
                 alert.showAndWait();
                 start(primaryStage); // return to main page after creation
 
