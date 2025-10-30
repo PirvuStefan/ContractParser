@@ -45,20 +45,20 @@ public class HelloApplication extends Application {
         imageBox.setPadding(new Insets(10));
 
         TextField regNumberField = new TextField();
-        regNumberField.setPromptText("Registration Number");
+        regNumberField.setPromptText("Numar de Inregistrare");
         TextField phoneField = new TextField();
-        phoneField.setPromptText("Phone Number");
+        phoneField.setPromptText("Numar de Telefon");
         TextField placeField = new TextField();
-        placeField.setPromptText("Place");
+        placeField.setPromptText("Locatie");
         TextField cityField = new TextField();
-        cityField.setPromptText("City");
+        cityField.setPromptText("Oras");
 
         VBox fieldsBox = new VBox(15,
                 imageBox,
-                new Label("Registration Number:"), regNumberField,
-                new Label("Phone Number:"), phoneField,
-                new Label("Place:"), placeField,
-                new Label("City:"), cityField
+                new Label("Numar de inregistrare:"), regNumberField,
+                new Label("Telefon:"), phoneField,
+                new Label("Locatie:"), placeField,
+                new Label("Oras:"), cityField
         );
         fieldsBox.setPadding(new Insets(20));
         fieldsBox.setStyle("-fx-background-color: #f8f9fa; -fx-border-radius: 10; -fx-background-radius: 10;");
@@ -126,7 +126,6 @@ public class HelloApplication extends Application {
             }
 
             String today = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-            String hireday = java.time.LocalDate.now().plusDays(1).format(java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy"));
             String phone = phoneField.getText();
             phone = phone.replaceAll("(\\d{4})(\\d{3})(\\d{3})", "$1 $2 $3");
 
@@ -178,15 +177,7 @@ public class HelloApplication extends Application {
                     return;
                 }
 
-            String salaryStr = Integer.toString(salary);
-            placeholders.put("ɔ", regNumberField.getText());
-            placeholders.put("ɖ", today);
-            placeholders.put("ɐ", hireday);
-            placeholders.put("ɕ", phone);
-            placeholders.put("ɘ", placeField.getText());
-            placeholders.put("ə", cityField.getText());
-            placeholders.put("ɥ", salaryStr);
-            File contractFile = new File(arhivaDir, name + ".docx");
+
             showReviewPage(placeholders, regNumberField.getText(),phone, placeField.getText(),cityField.getText());
 
 
@@ -231,49 +222,109 @@ public class HelloApplication extends Application {
 
         // Create text fields for the 7 extracted values
         TextField nameField = new TextField(extractedData.getOrDefault("ɛ", ""));
-        nameField.setPromptText("Name");
+        nameField.setPromptText("Nume");
 
         TextField seriesField = new TextField(extractedData.getOrDefault("ɜ", ""));
-        seriesField.setPromptText("ID Series");
+        seriesField.setPromptText("Seria");
 
         TextField numberField = new TextField(extractedData.getOrDefault("ɝ", ""));
-        numberField.setPromptText("ID Number");
+        numberField.setPromptText("Numarul");
 
         TextField cnpField = new TextField(extractedData.getOrDefault("ɞ", ""));
         cnpField.setPromptText("CNP");
 
         TextField issuedByField = new TextField(extractedData.getOrDefault("ɟ", ""));
-        issuedByField.setPromptText("Issued By");
+        issuedByField.setPromptText("Emis de");
 
         TextField addressField = new TextField(extractedData.getOrDefault("ɠ", ""));
-        addressField.setPromptText("Address");
+        addressField.setPromptText("Adresa");
 
         TextField validityField = new TextField(extractedData.getOrDefault("ɣ", ""));
-        validityField.setPromptText("Validity Date");
+        validityField.setPromptText("Data de valabilitate");
 
         VBox fieldsBox = new VBox(15,
-                new Label("Name:"), nameField,
-                new Label("ID Series:"), seriesField,
-                new Label("ID Number:"), numberField,
+                new Label("Nume:"), nameField,
+                new Label("Seria:"), seriesField,
+                new Label("Numarul:"), numberField,
                 new Label("CNP:"), cnpField,
-                new Label("Issued By:"), issuedByField,
-                new Label("Address:"), addressField,
-                new Label("Validity Date:"), validityField
+                new Label("Emis de:"), issuedByField,
+                new Label("Adresa:"), addressField,
+                new Label("Data de valabilitate:"), validityField
         );
         fieldsBox.setPadding(new Insets(20));
         fieldsBox.setStyle("-fx-background-color: #f8f9fa; -fx-border-radius: 10; -fx-background-radius: 10;");
         fieldsBox.setEffect(new DropShadow());
 
-        Button createButton = new Button("Create Contract");
+        Button createButton = new Button("Creare Contract");
         createButton.setDefaultButton(true);
         createButton.setStyle(glassButtonStyle());
 
-        Button backButton = new Button("Back");
+        Button backButton = new Button("Inapoi");
         backButton.setStyle(glassButtonStyle());
         backButton.setOnAction(e -> start(primaryStage));
 
         createButton.setOnAction(e -> {
             // Update placeholders with edited values
+            if(nameField.getText() == null || nameField.getText().trim().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Error");
+                alert.setHeaderText("Numele lipsa");
+                alert.setContentText("Te rog introdu numele.");
+                alert.showAndWait();
+                return;
+            }
+            if(seriesField.getText() == null || seriesField.getText().trim().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Error");
+                alert.setHeaderText("Seria lipsa");
+                alert.setContentText("Te rog introdu seria.");
+                alert.showAndWait();
+                return;
+            }
+            if(numberField.getText() == null || numberField.getText().trim().isEmpty())
+             {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Error");
+                alert.setHeaderText("Numarul lipsa");
+                alert.setContentText("Te rog introdu numarul.");
+                alert.showAndWait();
+                return;
+            }
+            if(cnpField.getText() == null || cnpField.getText().trim().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Error");
+                alert.setHeaderText("CNP-ul lipsa");
+                alert.setContentText("Te rog introdu CNP-ul.");
+                alert.showAndWait();
+                return;
+            }
+            if(issuedByField.getText() == null || issuedByField.getText().trim().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Error");
+                alert.setHeaderText("Cimpul 'Emis de' lipsa");
+                alert.setContentText("Te rog introdu cimpul 'Emis de'.");
+                alert.showAndWait();
+                return;
+            }
+            if(addressField.getText() == null || addressField.getText().trim().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Error");
+                alert.setHeaderText("Adresa lipsa");
+                alert.setContentText("Te rog introdu adresa.");
+                alert.showAndWait();
+                return;
+            }
+            if(validityField.getText() == null || validityField.getText().trim().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Error");
+                alert.setHeaderText("Data de valabilitate lipsa");
+                alert.setContentText("Te rog introdu data de valabilitate.");
+                alert.showAndWait();
+                return;
+            }
+
+
+
             extractedData.put("ɛ", nameField.getText());
             extractedData.put("ɜ", seriesField.getText());
             extractedData.put("ɝ", numberField.getText());
@@ -311,6 +362,8 @@ public class HelloApplication extends Application {
             String today = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy"));
             String hireday = java.time.LocalDate.now().plusDays(1).format(java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy"));
             String formattedPhone = phone.replaceAll("(\\d{4})(\\d{3})(\\d{3})", "$1 $2 $3");
+
+
 
             extractedData.put("ɔ", regNumber);
             extractedData.put("ɖ", today);
