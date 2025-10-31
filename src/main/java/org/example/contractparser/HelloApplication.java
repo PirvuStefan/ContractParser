@@ -14,10 +14,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 public class HelloApplication extends Application {
@@ -28,11 +25,8 @@ public class HelloApplication extends Application {
     public void start(Stage stage) {
         this.primaryStage = stage;
 
-        try {
-            ConfigToJarDir.main(new String[]{});
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
+        // Initialize configuration
+        ContractService.initializeConfig();
 
         stage.setTitle("ContractParser");
 
@@ -78,110 +72,44 @@ public class HelloApplication extends Application {
 
         stage.setScene(scene);
         stage.show();
+
         submitButton.setOnAction(e -> {
-            File arhivaDir = new File("arhiva");
-            if (!arhivaDir.exists()) {
-                arhivaDir.mkdir();
+            // Validate initial form fields
+            ContractService.ValidationResult validation = ContractService.validateInitialForm(
+                regNumberField.getText(),
+                phoneField.getText(),
+                placeField.getText(),
+                cityField.getText()
+            );
+
+            if (!validation.isValid()) {
+                showErrorAlert(validation.getErrorTitle(), validation.getErrorMessage());
+                return;
             }
 
+            // Ensure arhiva directory exists
+            ContractService.ensureArhivaDirectory();
 
-//            DetectText.main(new String[]{}, new File(imagePath));
-            // lets see what we have here
-
-
-            String name = "Andrei_Mihai";
-
-
-            int salary;
-            Path configPath = Paths.get("config.yml");
-            if(!Files.exists(configPath)) {
-                try {
-                    Files.createFile(configPath);
-                    Files.write(configPath, List.of("salary: 4800"));
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-            try {
-                if (Files.exists(configPath)) {
-                    List<String> lines = Files.readAllLines(configPath);
-                    salary = 4800; // default
-                    for (String l : lines) {
-                        String trimmed = l.trim();
-                        if (trimmed.startsWith("salary:")) {
-                            String val = trimmed.substring("salary:".length()).trim();
-                            val = val.replaceAll("^['\"]|['\"]$", "");
-                            try {
-                                salary = Integer.parseInt(val);
-                            } catch (NumberFormatException ignored) {
-                            }
-                            break;
-                        }
-                    }
-                } else {
-                    salary = 4800; // default if config missing
-                }
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-
-            String today = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-            String phone = phoneField.getText();
-            phone = phone.replaceAll("(\\d{4})(\\d{3})(\\d{3})", "$1 $2 $3");
-
-            // this should be the palceholder for salary :  ɥ
-            System.out.println(phone); // Debugging line
-            System.out.println("Today's date: " + today); // Debugging line
-            Map<String, String> placeholders = new java.util.HashMap<>();
-
-            if(imageView.getImage()!=null) {
+            // Extract data from image if present
+            Map<String, String> placeholders = new HashMap<>();
+            if (imageView.getImage() != null) {
                 try {
                     String imagePath = imageView.getImage().getUrl().replaceFirst("^file:", "");
-                    placeholders = new DetectText().extractMap(imagePath);
+                    placeholders = ContractService.extractDataFromImage(imagePath);
                 } catch (IOException ex) {
-                    throw new RuntimeException(ex);
+                    showErrorAlert("Extraction Error",
+                        "Failed to extract data from ID card: " + ex.getMessage());
+                    return;
                 }
-
             }
 
-            if (regNumberField.getText() == null || regNumberField.getText().trim().isEmpty()) {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Error");
-                    alert.setHeaderText("Numarul de inregistrare lipsa");
-                    alert.setContentText("Te rog introdu numarul de inregistrare.");
-                    alert.showAndWait();
-                    return;
-                }
-                if (phoneField.getText() == null || phoneField.getText().trim().isEmpty()) {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Error");
-                    alert.setHeaderText("Numarul de telefon lipsa");
-                    alert.setContentText("Te rog introdu numarul de telefon.");
-                    alert.showAndWait();
-                    return;
-                }
-                if (placeField.getText() == null || placeField.getText().trim().isEmpty()) {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Error");
-                    alert.setHeaderText("Locatia lipsa");
-                    alert.setContentText("Te rog introdu locatia.");
-                    alert.showAndWait();
-                    return;
-                }
-                if (cityField.getText() == null || cityField.getText().trim().isEmpty()) {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Error");
-                    alert.setHeaderText("Orasul lipsa");
-                    alert.setContentText("Te rog introdu orasul.");
-                    alert.showAndWait();
-                    return;
-                }
-
-
-            showReviewPage(placeholders, regNumberField.getText(),phone, placeField.getText(),cityField.getText());
-
-
-
+            // Show review page
+            showReviewPage(placeholders,
+                regNumberField.getText(),
+                phoneField.getText(),
+                placeField.getText(),
+                cityField.getText()
+            );
         });
 
     }
@@ -213,7 +141,7 @@ public class HelloApplication extends Application {
         if (selectedFile != null) {
             Image image = new Image(selectedFile.toURI().toString(), 80, 80, true, true);
             imageView.setImage(image);
-        };
+        }
     }
 
     private void showReviewPage(Map<String, String> extractedData, String regNumber,
@@ -264,67 +192,23 @@ public class HelloApplication extends Application {
         backButton.setOnAction(e -> start(primaryStage));
 
         createButton.setOnAction(e -> {
-            // Update placeholders with edited values
-            if(nameField.getText() == null || nameField.getText().trim().isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Error");
-                alert.setHeaderText("Numele lipsa");
-                alert.setContentText("Te rog introdu numele.");
-                alert.showAndWait();
-                return;
-            }
-            if(seriesField.getText() == null || seriesField.getText().trim().isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Error");
-                alert.setHeaderText("Seria lipsa");
-                alert.setContentText("Te rog introdu seria.");
-                alert.showAndWait();
-                return;
-            }
-            if(numberField.getText() == null || numberField.getText().trim().isEmpty())
-             {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Error");
-                alert.setHeaderText("Numarul lipsa");
-                alert.setContentText("Te rog introdu numarul.");
-                alert.showAndWait();
-                return;
-            }
-            if(cnpField.getText() == null || cnpField.getText().trim().isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Error");
-                alert.setHeaderText("CNP-ul lipsa");
-                alert.setContentText("Te rog introdu CNP-ul.");
-                alert.showAndWait();
-                return;
-            }
-            if(issuedByField.getText() == null || issuedByField.getText().trim().isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Error");
-                alert.setHeaderText("Cimpul 'Emis de' lipsa");
-                alert.setContentText("Te rog introdu cimpul 'Emis de'.");
-                alert.showAndWait();
-                return;
-            }
-            if(addressField.getText() == null || addressField.getText().trim().isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Error");
-                alert.setHeaderText("Adresa lipsa");
-                alert.setContentText("Te rog introdu adresa.");
-                alert.showAndWait();
-                return;
-            }
-            if(validityField.getText() == null || validityField.getText().trim().isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Error");
-                alert.setHeaderText("Data de valabilitate lipsa");
-                alert.setContentText("Te rog introdu data de valabilitate.");
-                alert.showAndWait();
+            // Validate review form fields
+            ContractService.ValidationResult validation = ContractService.validateReviewForm(
+                nameField.getText(),
+                seriesField.getText(),
+                numberField.getText(),
+                cnpField.getText(),
+                issuedByField.getText(),
+                addressField.getText(),
+                validityField.getText()
+            );
+
+            if (!validation.isValid()) {
+                showErrorAlert(validation.getErrorTitle(), validation.getErrorMessage());
                 return;
             }
 
-
-
+            // Update extracted data with edited values
             extractedData.put("ɛ", nameField.getText());
             extractedData.put("ɜ", seriesField.getText());
             extractedData.put("ɝ", numberField.getText());
@@ -333,98 +217,22 @@ public class HelloApplication extends Application {
             extractedData.put("ɠ", addressField.getText());
             extractedData.put("ɣ", validityField.getText());
 
-            // Add additional data
-            int salary;
-            Path configPath = Paths.get("config.yml");
+            // Build complete data map with all placeholders
+            Map<String, String> completeData = ContractService.buildCompleteDataMap(
+                extractedData, regNumber, phone, place, city
+            );
+
+            // Generate documents
             try {
-                if (!Files.exists(configPath)) {
-                    Files.createFile(configPath);
-                    Files.write(configPath, List.of("salary: 4800"));
-                }
-                List<String> lines = Files.readAllLines(configPath);
-                salary = 4800;
-                for (String l : lines) {
-                    String trimmed = l.trim();
-                    if (trimmed.startsWith("salary:")) {
-                        String val = trimmed.substring("salary:".length()).trim();
-                        val = val.replaceAll("^['\"]|['\"]$", "");
-                        try {
-                            salary = Integer.parseInt(val);
-                        } catch (NumberFormatException ignored) {
-                        }
-                        break;
-                    }
-                }
-            } catch (IOException ex) {
-                salary = 4800;
-            }
+                ContractService.generateDocuments(nameField.getText(), completeData);
 
-            String today = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-            String hireday = java.time.LocalDate.now().plusDays(1).format(java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-            String formattedPhone = phone.replaceAll("(\\d{4})(\\d{3})(\\d{3})", "$1 $2 $3");
-
-
-
-            extractedData.put("ɔ", regNumber);
-            extractedData.put("ɖ", today);
-            extractedData.put("ɐ", hireday);
-            extractedData.put("ɕ", formattedPhone);
-            extractedData.put("ɘ", place);
-            extractedData.put("ə", city);
-            extractedData.put("ɥ", Integer.toString(salary));
-
-            String name = nameField.getText().replace(" ", "_");
-            File arhivaDir = new File("arhiva");
-            if (!arhivaDir.exists()) {
-                arhivaDir.mkdir();
-            }
-            File contractFile = null;
-            File fisaFile = null;
-            try {
-                contractFile = new File(arhivaDir, name + ".docx");
-                fisaFile = new File(arhivaDir, name + "_fisa.docx");
-                if (!contractFile.exists()) contractFile.createNewFile();
-                if (!fisaFile.exists()) fisaFile.createNewFile();
-            } catch (IOException ex) {
-
-            }
-
-
-
-            try {
-                try (java.io.InputStream tmplIs = HelloApplication.class.getResourceAsStream("/contract.docx");
-                     java.io.InputStream fisaIs = HelloApplication.class.getResourceAsStream("/fisa.docx")) {
-
-                    if (tmplIs == null) throw new IOException("Resource `/contract.docx` not found in JAR");
-                    if (fisaIs == null) throw new IOException("Resource `/fisa.docx` not found in JAR");
-
-                    File tmpTemplate = File.createTempFile("contract_template", ".docx");
-                    tmpTemplate.deleteOnExit();
-                    Files.copy(tmplIs, tmpTemplate.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-
-                    File tmpFisa = File.createTempFile("fisa_template", ".docx");
-                    tmpFisa.deleteOnExit();
-                    Files.copy(fisaIs, tmpFisa.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-
-                    Contract.generateContract(tmpTemplate.getAbsolutePath(), contractFile.getAbsolutePath(), extractedData);
-                    Contract.generateContract(tmpFisa.getAbsolutePath(), fisaFile.getAbsolutePath(), extractedData);
-                }
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Success");
-                alert.setHeaderText("Contracte generate");
-                alert.setContentText("Contractul si Fisa au fost generate cu succes in folderul 'arhiva'.");
-                alert.showAndWait();
-                start(primaryStage); // return to main page after creation
+                showSuccessAlert("Contracte generate",
+                    "Contractul si Fisa au fost generate cu succes in folderul 'arhiva'.");
+                start(primaryStage); // return to main page
 
             } catch (IOException ex) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Failed to generate contracts");
-                alert.setContentText(ex.getMessage());
-                alert.showAndWait();
+                showErrorAlert("Failed to generate contracts", ex.getMessage());
             }
-
 
         });
 
@@ -441,6 +249,24 @@ public class HelloApplication extends Application {
 
         Scene scene = new Scene(scrollPane, 500, 700);
         primaryStage.setScene(scene);
+    }
+
+
+    private void showErrorAlert(String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+
+    private void showSuccessAlert(String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success");
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
     public static void main(String[] args) {
