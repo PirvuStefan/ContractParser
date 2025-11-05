@@ -21,7 +21,7 @@ public class ContractService {
 
     private static final String ARHIVA_DIR = "arhiva";
     private static final String CONFIG_FILE = "config.yml";
-    private static final int DEFAULT_SALARY = 4800;
+    private static final int DEFAULT_SALARY = 4050;
     private static final String DATE_FORMAT = "dd.MM.yyyy";
 
 

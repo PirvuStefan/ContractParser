@@ -159,6 +159,7 @@ public class DetectText {
                 textMap.put("ɛ", getName(word));
                 System.out.println("Numele este: " + getName(word));
 
+
             }
             else if(word.contains("<")){
                 word = word.trim();
@@ -166,6 +167,8 @@ public class DetectText {
                 textMap.put("ɝ", word.substring(2,7));
                 // here we can also put the cnp if needed
                 textMap.put("ɞ", getCNP(word));
+                textMap.put("ȕ", getBirthDate( getCNP(word)));
+                System.out.println("Data nasterii este: " + getBirthDate( getCNP(word)));
 
 
                 System.out.println("Seria este: " + word.substring(0,2));
@@ -178,6 +181,12 @@ public class DetectText {
                 System.out.println("Eliberat de: " + word);
 
             }
+            else if(word.contains("Loc Nastere") || word.contains("Lieu de naissance") || word.contains("Place of birth")){
+                String place = textBlocks.get(i+1).trim();
+                System.out.println("Locul nasterii este: " + place);
+                textMap.put("ɠ", place);
+
+            } /// TODO : make a way to extract the birth place because it might have a lot of edge cases
             else if(word.contains("Adresse") || word.contains("Adress") || word.contains("Domiciliu")){
                 String adress1 = textBlocks.get(i+1).trim();
                 String adress2 = textBlocks.get(i+2).trim();
@@ -213,14 +222,28 @@ public class DetectText {
         char c = word.charAt(word.length() - 1);
         // AX839941<58009702248M310803310126561
         word = c + word.substring(13,19) + word.substring(29,35);
-        System.out.println(" CNP este: " + word);
+
         return word;
 
     }
 
-    private boolean checkLetter(char c) {
-        return Character.isLetter(c);
+    private String getBirthDate(String cnp){
+        String birthDate = "";
+        if(cnp.length() == 13){
+            String year = cnp.substring(1,3);
+            String month = cnp.substring(3,5);
+            String day = cnp.substring(5,7);
+           if (cnp.charAt(0) == '1' || cnp.charAt(0) == '2') {
+                year = "19" + year;
+           } else {
+                year = "20" + year;
+           }
+            birthDate = day + "." + month + "." + year;
+        }
+        return birthDate;
     }
+
+
 
 
 
