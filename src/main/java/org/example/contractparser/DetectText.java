@@ -11,7 +11,6 @@ import software.amazon.awssdk.services.textract.model.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -164,7 +163,7 @@ public class DetectText {
             else if(word.contains("<")){
                 word = word.trim();
                 textMap.put("ɜ", word.substring(0,2));
-                textMap.put("ɝ", word.substring(2,7));
+                textMap.put("ɝ", word.substring(2,8));
                 // here we can also put the cnp if needed
                 textMap.put("ɞ", getCNP(word));
                 textMap.put("ȕ", getBirthDate( getCNP(word)));
@@ -183,8 +182,13 @@ public class DetectText {
             }
             else if(word.contains("Loc Nastere") || word.contains("Lieu de naissance") || word.contains("Place of birth")){
                 String place = textBlocks.get(i+1).trim();
-                System.out.println("Locul nasterii este: " + place);
+                System.out.println("lets eee " + place);
+                System.out.println("Locul nasterii este: " + getBirthLocation(place, "judet"));
+
+                System.out.println("Locul nasterii este: " + getBirthLocation(place, "country"));
+                // now we need to put here for the placeholder of judet and country if needed
                 textMap.put("ɠ", place);
+
 
             } /// TODO : make a way to extract the birth place because it might have a lot of edge cases
             else if(word.contains("Adresse") || word.contains("Adress") || word.contains("Domiciliu")){
@@ -242,6 +246,36 @@ public class DetectText {
         }
         return birthDate;
     }
+
+    private String getBirthLocation(String place, String type) {
+        String[] search ;
+
+        if (type == "judet") search = new String[]{"Jud."};
+        else search = new String[]{"Mun.","Ors.", "Sat"};
+
+
+
+        String[] parts = place.split(",");
+       for( String s : search) {
+           int judIndex = place.indexOf(s);
+           if (judIndex != -1) {
+               int start = judIndex + "Jud.".length();
+               int spaceIndex = place.indexOf(' ', start);
+               if (spaceIndex != -1) {
+                   return place.substring(start, spaceIndex).trim();
+               } else {
+                   return place.substring(start).trim();
+               }
+           }
+           if (parts.length > 1) {
+               return parts[parts.length - 1].trim();
+           }
+       }
+
+        return "nedefinit";
+    }
+
+
 
 
 
