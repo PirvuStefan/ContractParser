@@ -11,12 +11,7 @@ import software.amazon.awssdk.services.textract.model.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-
+import java.util.*;
 
 
 public class DetectText {
@@ -166,6 +161,7 @@ public class DetectText {
                 textMap.put("ɝ", word.substring(2,8));
                 // here we can also put the cnp if needed
                 textMap.put("ɞ", getCNP(word));
+                System.out.println("CNP-ul este: " + getCNP(word));
                 textMap.put("ȕ", getBirthDate( getCNP(word)));
                 System.out.println("Data nasterii este: " + getBirthDate( getCNP(word)));
 
@@ -195,6 +191,11 @@ public class DetectText {
                 String adress1 = textBlocks.get(i+1).trim();
                 String adress2 = textBlocks.get(i+2).trim();
                 System.out.println("Adresa este: " + adress1 + " " + adress2);
+                System.out.println("blocul este: " + getAdressDetails(adress2, "bloc"));
+                System.out.println("numarul este: " + getAdressDetails(adress2, "numar"));
+                System.out.println("scara este: " + getAdressDetails(adress2, "scara"));
+                System.out.println("etajul este: " + getAdressDetails(adress2, "etaj"));
+                System.out.println("apartamentul este: " + getAdressDetails(adress2, "apartment"));
                 textMap.put("ɠ", adress1 + " " + adress2);
                 i = i + 2;
             }
@@ -227,6 +228,8 @@ public class DetectText {
         // AX839941<58009702248M310803310126561
         word = c + word.substring(13,19) + word.substring(29,35);
 
+
+
         return word;
 
     }
@@ -250,7 +253,7 @@ public class DetectText {
     private String getBirthLocation(String place, String type) {
         String[] search ;
 
-        if (type == "judet") search = new String[]{"Jud."};
+        if (Objects.equals(type, "judet")) search = new String[]{"Jud."};
         else search = new String[]{"Mun.","Ors.", "Sat"};
 
 
@@ -271,6 +274,37 @@ public class DetectText {
                return parts[parts.length - 1].trim();
            }
        }
+
+        return "nedefinit";
+    }
+
+    private String getAdressDetails(String adress, String type) {
+
+        String[] search = switch (type) {
+            case "numar" -> new String[]{"nr."};
+            case "scara" -> new String[]{"sc."};
+            case "bloc" -> new String[]{"bl."};
+            case "etaj" -> new String[]{"et."};
+            default -> new String[]{"ap."};
+        };
+
+
+        String[] parts = adress.split(",");
+        for( String s : search) {
+            int judIndex = adress.indexOf(s);
+            if (judIndex != -1) {
+                int start = judIndex + "Jud.".length();
+                int spaceIndex = adress.indexOf(' ', start);
+                if (spaceIndex != -1) {
+                    return adress.substring(start, spaceIndex).trim();
+                } else {
+                    return adress.substring(start).trim();
+                }
+            }
+            if (parts.length > 1) {
+                return parts[parts.length - 1].trim();
+            }
+        }
 
         return "nedefinit";
     }
