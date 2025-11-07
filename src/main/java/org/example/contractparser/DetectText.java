@@ -311,6 +311,27 @@ public class DetectText {
             default -> new String[]{"ap."};
         };
 
+        if(type.equals("strada")){
+
+            for (String s : search) {
+                String lower = adress.toLowerCase();
+                int idx = lower.indexOf(s.toLowerCase());
+                if (idx != -1) {
+                    int start = idx + s.length();
+                    int nrIdx = lower.indexOf("nr.", start);
+                    int commaIdx = lower.indexOf(',', start);
+                    int end;
+                    if (nrIdx != -1) end = nrIdx;
+                    else if (commaIdx != -1) end = commaIdx;
+                    else end = adress.length();
+                    String name = adress.substring(start, end).trim();
+                    name = name.replaceAll("^[,\\.:\\-\\s]+", "").replaceAll("[,\\.:\\-\\s]+$", "");
+                    return name;
+                }
+            }
+            return "nedefinit";
+        }
+
 
         String[] parts = adress.split(",");
         for( String s : search) {
