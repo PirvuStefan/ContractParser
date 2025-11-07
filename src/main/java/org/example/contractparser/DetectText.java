@@ -185,10 +185,10 @@ public class DetectText {
                 String place = textBlocks.get(i+1).trim();
                 System.out.println("lets eee " + place);
                 System.out.println("Locul nasterii este: " + getBirthLocation(place, "judet"));
-
                 System.out.println("Locul nasterii este: " + getBirthLocation(place, "country"));
                 // now we need to put here for the placeholder of judet and country if needed
-                textMap.put("ɠ", place);
+                textMap.put("Ȣ", getBirthLocation(place, "judet"));
+                textMap.put("Ȥ", getBirthLocation(place, "country"));
 
 
             } /// TODO : make a way to extract the birth place because it might have a lot of edge cases
@@ -201,7 +201,24 @@ public class DetectText {
                 System.out.println("scara este: " + getAdressDetails(adress2, "scara"));
                 System.out.println("etajul este: " + getAdressDetails(adress2, "etaj"));
                 System.out.println("apartamentul este: " + getAdressDetails(adress2, "apartment"));
+
+                textMap.put("Ƚ",getBirthLocation(adress1, "judet"));
+                textMap.put("ʦ", getBirthLocation(adress1, "localitate"));
                 textMap.put("ɠ", adress1 + " " + adress2);
+                textMap.put("ʠ", getAdressDetails(adress2, "bloc"));
+                textMap.put("ʡ", getAdressDetails(adress2, "numar"));
+                textMap.put("ʢ", getAdressDetails(adress2, "scara"));
+                textMap.put("ʣ", getAdressDetails(adress2, "etaj"));
+                textMap.put("ʤ", getAdressDetails(adress2, "apartment"));
+
+                System.out.println("strada este: " + getAdressDetails(adress1, "strada"));
+                System.out.println("judetul este: " + getBirthLocation(adress1, "judet"));
+                System.out.println("orasul este: " + getBirthLocation(adress1, "oras"));
+
+                if(!getAdressDetails(adress1, "strada").equals("nedefinit")){
+                    textMap.put("Ɋ",getAdressDetails(adress1, "strada"));
+                }
+                else textMap.put("Ɋ",getAdressDetails(adress2, "strada")); // if the street is not in the first line try the second line
                 i = i + 2;
             }
             else if(word.contains("Valabilitate") || word.contains("Validity") || word.contains("Validite")){
@@ -290,6 +307,7 @@ public class DetectText {
             case "scara" -> new String[]{"sc."};
             case "bloc" -> new String[]{"bl."};
             case "etaj" -> new String[]{"et."};
+            case "strada" -> new String[]{"Str.","Bd."};
             default -> new String[]{"ap."};
         };
 

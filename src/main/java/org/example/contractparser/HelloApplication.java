@@ -151,113 +151,6 @@ public class HelloApplication extends Application {
         }
     }
 
-    private void showReviewPage(Map<String, String> extractedData, String regNumber,
-                                String phone, String place, String city) {
-        primaryStage.setTitle("Review Extracted Data");
-
-        // Create text fields for the 7 extracted values
-        TextField nameField = new TextField(extractedData.getOrDefault("ɛ", ""));
-        nameField.setPromptText("Nume");
-
-        TextField seriesField = new TextField(extractedData.getOrDefault("ɜ", ""));
-        seriesField.setPromptText("Seria");
-
-        TextField numberField = new TextField(extractedData.getOrDefault("ɝ", ""));
-        numberField.setPromptText("Numarul");
-
-        TextField cnpField = new TextField(extractedData.getOrDefault("ɞ", ""));
-        cnpField.setPromptText("CNP");
-
-        TextField issuedByField = new TextField(extractedData.getOrDefault("ɟ", ""));
-        issuedByField.setPromptText("Emis de");
-
-        TextField addressField = new TextField(extractedData.getOrDefault("ɠ", ""));
-        addressField.setPromptText("Adresa");
-
-        TextField validityField = new TextField(extractedData.getOrDefault("ɣ", ""));
-        validityField.setPromptText("Data de valabilitate");
-
-        VBox fieldsBox = new VBox(15,
-                new Label("Nume:"), nameField,
-                new Label("Seria:"), seriesField,
-                new Label("Numarul:"), numberField,
-                new Label("CNP:"), cnpField,
-                new Label("Emis de:"), issuedByField,
-                new Label("Adresa:"), addressField,
-                new Label("Data de valabilitate:"), validityField
-        );
-        fieldsBox.setPadding(new Insets(20));
-        fieldsBox.setStyle("-fx-background-color: #f8f9fa; -fx-border-radius: 10; -fx-background-radius: 10;");
-        fieldsBox.setEffect(new DropShadow());
-
-        Button createButton = new Button("Creare Contract");
-        createButton.setDefaultButton(true);
-        createButton.setStyle(glassButtonStyle());
-
-        Button backButton = new Button("Inapoi");
-        backButton.setStyle(glassButtonStyle());
-        backButton.setOnAction(e -> start(primaryStage));
-
-        createButton.setOnAction(e -> {
-            // Validate review form fields
-            ContractService.ValidationResult validation = ContractService.validateReviewForm(
-                nameField.getText(),
-                seriesField.getText(),
-                numberField.getText(),
-                cnpField.getText(),
-                issuedByField.getText(),
-                addressField.getText(),
-                validityField.getText()
-            );
-
-            if (!validation.isValid()) {
-                showErrorAlert(validation.getErrorTitle(), validation.getErrorMessage());
-                return;
-            }
-
-            // Update extracted data with edited values
-            extractedData.put("ɛ", nameField.getText());
-            extractedData.put("ɜ", seriesField.getText());
-            extractedData.put("ɝ", numberField.getText());
-            extractedData.put("ɞ", cnpField.getText());
-            extractedData.put("ɟ", issuedByField.getText());
-            extractedData.put("ɠ", addressField.getText());
-            extractedData.put("ɣ", validityField.getText());
-
-            // Build complete data map with all placeholders
-            Map<String, String> completeData = ContractService.buildCompleteDataMap(
-                extractedData, regNumber, phone, place, city
-            );
-
-            // Generate documents
-            try {
-                ContractService.generateDocuments(nameField.getText(), completeData);
-
-                showSuccessAlert("Contracte generate",
-                    "Contractul si Fisa au fost generate cu succes in folderul 'arhiva'.");
-                start(primaryStage); // return to main page
-
-            } catch (IOException ex) {
-                showErrorAlert("Failed to generate contracts", ex.getMessage());
-            }
-
-        });
-
-        HBox buttonBox = new HBox(15, backButton, createButton);
-        buttonBox.setAlignment(Pos.CENTER);
-
-        VBox root = new VBox(20, fieldsBox, buttonBox);
-        root.setPadding(new Insets(30));
-        root.setStyle("-fx-background-color: #e9ecef;");
-
-        ScrollPane scrollPane = new ScrollPane(root);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setStyle("-fx-background-color: #e9ecef;");
-
-        Scene scene = new Scene(scrollPane, 500, 700);
-        primaryStage.setScene(scene);
-    }
-
     private void showDetailedReviewPage(Map<String, String> extractedData, String regNumber,
                                         String phone, String place, String city) {
         primaryStage.setTitle("Review Extracted Data");
@@ -285,34 +178,37 @@ public class HelloApplication extends Application {
         validityField.setPromptText("Data de valabilitate");
 
         // New additional fields
-        TextField birthCountyField = new TextField(extractedData.getOrDefault("birthCounty", ""));
+       TextField birthCountyField = new TextField(extractedData.getOrDefault("Ȣ", ""));
         birthCountyField.setPromptText("Judet nastere");
 
-        TextField birthCountryField = new TextField(extractedData.getOrDefault("birthCountry", ""));
+        TextField birthCountryField = new TextField(extractedData.getOrDefault("Ȥ", ""));
         birthCountryField.setPromptText("Tara nastere");
 
-        TextField birthDateField = new TextField(extractedData.getOrDefault("birthDate", ""));
+        TextField birthDateField = new TextField(extractedData.getOrDefault("ȕ", ""));
         birthDateField.setPromptText("Data nastere");
 
-        TextField addressCountyField = new TextField(extractedData.getOrDefault("addressCounty", ""));
+        TextField addressCountyField = new TextField(extractedData.getOrDefault("Ƚ", ""));
         addressCountyField.setPromptText("Judet adresa");
 
-        TextField addressCountryField = new TextField(extractedData.getOrDefault("addressCountry", ""));
+        TextField addressCountryField = new TextField(extractedData.getOrDefault("ʦ", ""));
         addressCountryField.setPromptText("Tara adresa");
 
-        TextField addressStreetField = new TextField(extractedData.getOrDefault("addressStreet", ""));
+        TextField addressStreetField = new TextField(extractedData.getOrDefault("Ɋ", ""));
         addressStreetField.setPromptText("Strada");
 
-        TextField addressNumberField = new TextField(extractedData.getOrDefault("addressNumber", ""));
+        TextField addressNumberField = new TextField(extractedData.getOrDefault("ʡ", ""));
         addressNumberField.setPromptText("Numar");
 
-        TextField addressBlocField = new TextField(extractedData.getOrDefault("addressBloc", ""));
+        TextField addressBlocField = new TextField(extractedData.getOrDefault("ʠ", ""));
         addressBlocField.setPromptText("Bloc");
 
-        TextField addressScaraField = new TextField(extractedData.getOrDefault("addressScara", ""));
+        TextField addressScaraField = new TextField(extractedData.getOrDefault("ʢ", ""));
         addressScaraField.setPromptText("Scara");
 
-        TextField addressApartmentField = new TextField(extractedData.getOrDefault("addressApartment", ""));
+        TextField adressEtajField = new TextField(extractedData.getOrDefault("ʣ", ""));
+        adressEtajField.setPromptText("Etaj");
+
+        TextField addressApartmentField = new TextField(extractedData.getOrDefault("ʤ", ""));
         addressApartmentField.setPromptText("Apartament");
 
         VBox fieldsBox = new VBox(15,
@@ -334,6 +230,7 @@ public class HelloApplication extends Application {
                 new Label("Numar:"), addressNumberField,
                 new Label("Bloc:"), addressBlocField,
                 new Label("Scara:"), addressScaraField,
+                new Label("Etaj:"), adressEtajField,
                 new Label("Apartament:"), addressApartmentField
         );
         fieldsBox.setPadding(new Insets(20));
@@ -375,16 +272,17 @@ public class HelloApplication extends Application {
             extractedData.put("ɣ", validityField.getText());
 
             // Add new fields to extracted data
-            extractedData.put("birthCounty", birthCountyField.getText());
-            extractedData.put("birthCountry", birthCountryField.getText());
-            extractedData.put("birthDate", birthDateField.getText());
-            extractedData.put("addressCounty", addressCountyField.getText());
-            extractedData.put("addressCountry", addressCountryField.getText());
-            extractedData.put("addressStreet", addressStreetField.getText());
-            extractedData.put("addressNumber", addressNumberField.getText());
-            extractedData.put("addressBloc", addressBlocField.getText());
-            extractedData.put("addressScara", addressScaraField.getText());
-            extractedData.put("addressApartment", addressApartmentField.getText());
+            extractedData.put("Ȣ", birthCountyField.getText());
+            extractedData.put("Ȥ", birthCountryField.getText());
+            extractedData.put("ȕ", birthDateField.getText());
+            extractedData.put("Ƚ", addressCountyField.getText());
+            extractedData.put("ʦ", addressCountryField.getText());
+            extractedData.put("Ɋ", addressStreetField.getText());
+            extractedData.put("ʡ", addressNumberField.getText());
+            extractedData.put("ʠ", addressBlocField.getText());
+            extractedData.put("ʢ", addressScaraField.getText());
+            extractedData.put("ʣ", adressEtajField.getText());
+            extractedData.put("ʤ", addressApartmentField.getText());
 
             // Build complete data map with all placeholders
             Map<String, String> completeData = ContractService.buildCompleteDataMap(
