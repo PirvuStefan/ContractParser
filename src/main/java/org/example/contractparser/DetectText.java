@@ -101,9 +101,13 @@ public class DetectText {
                     lines.add(lineText);
                 }
 
+                System.out.println(lineText);
+
                 }
             }
         }
+
+        System.out.println("\n\nExtracted lines: " + lines);
 
         return lines;
     }
@@ -155,17 +159,18 @@ public class DetectText {
 
 
             }
+            else if(word.contains("CNP")){
+                word = word.replaceAll("CNP", "").trim();
+                textMap.put("ɞ", word);
+                System.out.println("CNP-ul este: " + word);
+                textMap.put("ȕ", getBirthDate( word ));
+                System.out.println("Data nasterii este: " + getBirthDate( word ));
+            }
             else if(word.contains("<")){
                 word = word.trim();
                 textMap.put("ɜ", word.substring(0,2));
                 textMap.put("ɝ", word.substring(2,8));
                 // here we can also put the cnp if needed
-                textMap.put("ɞ", getCNP(word));
-                System.out.println("CNP-ul este: " + getCNP(word));
-                textMap.put("ȕ", getBirthDate( getCNP(word)));
-                System.out.println("Data nasterii este: " + getBirthDate( getCNP(word)));
-
-
                 System.out.println("Seria este: " + word.substring(0,2));
                 System.out.println("Numarul este: " + word.substring(2,8));
 
@@ -293,7 +298,7 @@ public class DetectText {
         for( String s : search) {
             int judIndex = adress.indexOf(s);
             if (judIndex != -1) {
-                int start = judIndex + "Jud.".length();
+                int start = judIndex + s.length();
                 int spaceIndex = adress.indexOf(' ', start);
                 if (spaceIndex != -1) {
                     return adress.substring(start, spaceIndex).trim();
