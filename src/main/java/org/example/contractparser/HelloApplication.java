@@ -246,15 +246,26 @@ public class HelloApplication extends Application {
         backButton.setOnAction(e -> start(primaryStage));
 
         createButton.setOnAction(e -> {
-            // Validate review form fields
-            ContractService.ValidationResult validation = ContractService.validateReviewForm(
+            // Validate detailed review form fields
+            ContractService.ValidationResult validation = ContractService.validateDetailedReviewForm(
                     nameField.getText(),
                     seriesField.getText(),
                     numberField.getText(),
                     cnpField.getText(),
                     issuedByField.getText(),
                     addressField.getText(),
-                    validityField.getText()
+                    validityField.getText(),
+                    birthCountyField.getText(),
+                    birthCountryField.getText(),
+                    birthDateField.getText(),
+                    addressCountyField.getText(),
+                    addressCountryField.getText(),
+                    addressStreetField.getText(),
+                    addressNumberField.getText(),
+                    addressBlocField.getText(),
+                    addressScaraField.getText(),
+                    adressEtajField.getText(),
+                    addressApartmentField.getText()
             );
 
             if (!validation.isValid()) {

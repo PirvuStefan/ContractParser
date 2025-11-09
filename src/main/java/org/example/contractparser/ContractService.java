@@ -257,5 +257,104 @@ public class ContractService {
         }
         return ValidationResult.success();
     }
+
+    /**
+     * Validates the detailed review form with all additional fields
+     *
+     * @param name name
+     * @param series series
+     * @param number number
+     * @param cnp CNP
+     * @param issuedBy issued by
+     * @param address address
+     * @param validity validity date
+     * @param birthCounty birth county
+     * @param birthCountry birth country
+     * @param birthDate birth date
+     * @param addressCounty address county
+     * @param addressCountry address country
+     * @param addressStreet address street
+     * @param addressNumber address number
+     * @param addressBloc address bloc
+     * @param addressScara address scara
+     * @param addressEtaj address etaj
+     * @param addressApartment address apartment
+     * @return validation result
+     */
+    public static ValidationResult validateDetailedReviewForm(String name, String series, String number,
+                                                              String cnp, String issuedBy, String address,
+                                                              String validity, String birthCounty, String birthCountry,
+                                                              String birthDate, String addressCounty, String addressCountry,
+                                                              String addressStreet, String addressNumber, String addressBloc,
+                                                              String addressScara, String addressEtaj, String addressApartment) {
+        if (!isFieldValid(name)) {
+            return ValidationResult.error("Numele lipsa", "Te rog introdu numele.");
+        }
+        if (!isFieldValid(series)) {
+            return ValidationResult.error("Seria lipsa", "Te rog introdu seria.");
+        }
+        if (!isFieldValid(number)) {
+            return ValidationResult.error("Numarul lipsa", "Te rog introdu numarul.");
+        }
+        if (!isFieldValid(cnp)) {
+            return ValidationResult.error("CNP-ul lipsa", "Te rog introdu CNP-ul.");
+        }
+        if (!isFieldValid(issuedBy)) {
+            return ValidationResult.error("Cimpul 'Emis de' lipsa",
+                "Te rog introdu cimpul 'Emis de'.");
+        }
+        if (!isFieldValid(address)) {
+            return ValidationResult.error("Adresa lipsa", "Te rog introdu adresa.");
+        }
+        if (!isFieldValid(validity)) {
+            return ValidationResult.error("Data de valabilitate lipsa",
+                "Te rog introdu data de valabilitate.");
+        }
+        if (!isFieldValid(birthCounty)) {
+            return ValidationResult.error("Judetul de nastere lipsa",
+                "Te rog introdu judetul de nastere.");
+        }
+        if (!isFieldValid(birthCountry)) {
+            return ValidationResult.error("Tara de nastere lipsa",
+                "Te rog introdu tara de nastere.");
+        }
+        if (!isFieldValid(birthDate)) {
+            return ValidationResult.error("Data nasterii lipsa",
+                "Te rog introdu data nasterii.");
+        }
+        if (!isFieldValid(addressCounty)) {
+            return ValidationResult.error("Judetul adresei lipsa",
+                "Te rog introdu judetul adresei.");
+        }
+        if (!isFieldValid(addressCountry)) {
+            return ValidationResult.error("Tara adresei lipsa",
+                "Te rog introdu tara adresei.");
+        }
+        if (!isFieldValid(addressStreet)) {
+            return ValidationResult.error("Strada lipsa",
+                "Te rog introdu strada.");
+        }
+        if (!isFieldValid(addressNumber)) {
+            return ValidationResult.error("Numarul adresei lipsa",
+                "Te rog introdu numarul adresei.");
+        }
+        if (!isFieldValid(addressBloc)) {
+            return ValidationResult.error("Blocul lipsa",
+                "Te rog introdu blocul.");
+        }
+        if (!isFieldValid(addressScara)) {
+            return ValidationResult.error("Scara lipsa",
+                "Te rog introdu scara.");
+        }
+        if (!isFieldValid(addressEtaj)) {
+            return ValidationResult.error("Etajul lipsa",
+                "Te rog introdu etajul.");
+        }
+        if (!isFieldValid(addressApartment)) {
+            return ValidationResult.error("Apartamentul lipsa",
+                "Te rog introdu apartamentul.");
+        }
+        return ValidationResult.success();
+    }
 }
 
