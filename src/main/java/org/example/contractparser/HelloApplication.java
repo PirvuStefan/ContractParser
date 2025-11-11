@@ -31,7 +31,7 @@ public class HelloApplication extends Application {
         stage.setTitle("ContractParser");
 
         Label imageLabel = new Label("ID Image (JPG/PNG):");
-        Button imageButton = new Button("Choose Image");
+        Button imageButton = new Button("Alege Imagine");
         imageButton.setOnAction(e -> chooseImage(stage));
         imageButton.setStyle(glassButtonStyle());
 
