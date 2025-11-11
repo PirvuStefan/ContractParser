@@ -247,27 +247,6 @@ If you don't have one, sign up at [aws.amazon.com](https://aws.amazon.com)
 1. Save the **Access Key ID** and **Secret Access Key**
 2. Add them to your `.env` file
 
-### 4. Enable Textract Service
-- Ensure AWS Textract is available in your selected region (default: `us-east-1`)
-- Check pricing at [AWS Textract Pricing](https://aws.amazon.com/textract/pricing/)
-
-### Minimal IAM Policy Example
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "textract:DetectDocumentText",
-        "textract:AnalyzeDocument"
-      ],
-      "Resource": "*"
-    }
-  ]
-}
-```
-
 ## 🐛 Troubleshooting
 
 ### Issue: "Resource `/contract.docx` not found in JAR"
@@ -315,15 +294,6 @@ salary: 4800
 
 The project uses Maven Shade Plugin to create an uber JAR that includes all dependencies. The main class is set to `Launcher` which then launches the JavaFX application.
 
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
 
 ## 📄 License
 

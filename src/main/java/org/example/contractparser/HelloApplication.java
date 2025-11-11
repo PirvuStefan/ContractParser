@@ -62,6 +62,9 @@ public class HelloApplication extends Application {
         submitButton.setDefaultButton(true);
         submitButton.setStyle(glassButtonStyle());
 
+        submitButton.setOnMousePressed(e -> submitButton.setStyle(glassButtonPressedStyle()));
+        submitButton.setOnMouseReleased(e -> submitButton.setStyle(glassButtonStyle()));
+
         HBox submitBox = new HBox(submitButton);
         submitBox.setAlignment(Pos.CENTER);
 
@@ -123,6 +126,23 @@ public class HelloApplication extends Application {
 
     private String glassButtonStyle() {
         return "-fx-background-color: rgba(255,255,255,0.25);"
+                + "-fx-background-radius: 15;"
+                + "-fx-border-radius: 15;"
+                + "-fx-border-color: rgba(255,255,255,0.5);"
+                + "-fx-border-width: 1;"
+                + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0.5, 0, 2);"
+                + "-fx-text-fill: #222;"
+                + "-fx-font-size: 15px;"
+                + "-fx-padding: 8 24 8 24;"
+                + "-fx-cursor: hand;"
+                + "-fx-font-weight: bold;"
+                + "-fx-background-insets: 0;"
+                + "-fx-focus-color: transparent;"
+                + "-fx-faint-focus-color: transparent;";
+    }
+
+    private String glassButtonPressedStyle() {
+        return "-fx-background-color: rgba(0,0,0,0.2);"
                 + "-fx-background-radius: 15;"
                 + "-fx-border-radius: 15;"
                 + "-fx-border-color: rgba(255,255,255,0.5);"
