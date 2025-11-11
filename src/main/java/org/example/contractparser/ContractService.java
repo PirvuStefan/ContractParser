@@ -218,45 +218,7 @@ public class ContractService {
         return ValidationResult.success();
     }
 
-    /**
-     *
-     * @param name name
-     * @param series series
-     * @param number number
-     * @param cnp CNP
-     * @param issuedBy issued by
-     * @param address address
-     * @param validity validity date
-     * @return validation result
-     */
-    public static ValidationResult validateReviewForm(String name, String series, String number,
-                                                     String cnp, String issuedBy, String address,
-                                                     String validity) {
-        if (!isFieldValid(name)) {
-            return ValidationResult.error("Numele lipsa", "Te rog introdu numele.");
-        }
-        if (!isFieldValid(series)) {
-            return ValidationResult.error("Seria lipsa", "Te rog introdu seria.");
-        }
-        if (!isFieldValid(number)) {
-            return ValidationResult.error("Numarul lipsa", "Te rog introdu numarul.");
-        }
-        if (!isFieldValid(cnp)) {
-            return ValidationResult.error("CNP-ul lipsa", "Te rog introdu CNP-ul.");
-        }
-        if (!isFieldValid(issuedBy)) {
-            return ValidationResult.error("Cimpul 'Emis de' lipsa",
-                "Te rog introdu cimpul 'Emis de'.");
-        }
-        if (!isFieldValid(address)) {
-            return ValidationResult.error("Adresa lipsa", "Te rog introdu adresa.");
-        }
-        if (!isFieldValid(validity)) {
-            return ValidationResult.error("Data de valabilitate lipsa",
-                "Te rog introdu data de valabilitate.");
-        }
-        return ValidationResult.success();
-    }
+
 
     /**
      * Validates the detailed review form with all additional fields

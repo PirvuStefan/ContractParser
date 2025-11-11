@@ -273,6 +273,8 @@ public class HelloApplication extends Application {
                 return;
             }
 
+            extractedData.put("ŵ", getFisaRegistration(regNumber));
+
             // Update extracted data with all edited values
             extractedData.put("ɛ", nameField.getText());
             extractedData.put("ɜ", seriesField.getText());
@@ -345,6 +347,20 @@ public class HelloApplication extends Application {
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    private String getFisaRegistration(String registrationNumber) {
+        if (registrationNumber == null || registrationNumber.isBlank()) {
+            return "";
+        }
+        String[] parts = registrationNumber.split("/", 2);
+        String numPart = parts[0].trim();
+        try {
+            long value = Long.parseLong(numPart);
+            return Long.toString(value + 1);
+        } catch (NumberFormatException e) {
+            return numPart;
+        }
     }
 
     public static void main(String[] args) {
