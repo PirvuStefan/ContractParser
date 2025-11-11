@@ -20,13 +20,10 @@ public class DetectText {
     private final Dotenv dotenv;
 
     public DetectText() {
-        this.dotenv = Dotenv.load();//
-//        String awsAccessKeyId = dotenv.get("AWS_ACCESS_KEY_ID");
-//        String awsSecretAccessKey = dotenv.get("AWS_SECRET_ACCESS_KEY");
-//        String awsRegion = dotenv.get("AWS_REGION") != null ? dotenv.get("AWS_REGION") : "us-east-1";
-        String awsAccessKeyId = System.getenv("AWS_ACCESS_KEY_ID");
-        String awsSecretAccessKey = System.getenv("AWS_SECRET_ACCESS_KEY");
-        String awsRegion = System.getenv("AWS_REGION") != null ? System.getenv("AWS_REGION") : "us-east-1";
+        this.dotenv = Dotenv.load();
+        String awsAccessKeyId = dotenv.get("AWS_ACCESS_KEY_ID");
+        String awsSecretAccessKey = dotenv.get("AWS_SECRET_ACCESS_KEY");
+        String awsRegion = dotenv.get("AWS_REGION") != null ? dotenv.get("AWS_REGION") : "us-east-1";
 
         AwsBasicCredentials awsCredentials = AwsBasicCredentials.create(awsAccessKeyId, awsSecretAccessKey);
 
