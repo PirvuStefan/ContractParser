@@ -21,9 +21,16 @@ public class DetectText {
 
     public DetectText() {
         this.dotenv = Dotenv.load();
-        String awsAccessKeyId = dotenv.get("AWS_ACCESS_KEY_ID");
-        String awsSecretAccessKey = dotenv.get("AWS_SECRET_ACCESS_KEY");
         String awsRegion = dotenv.get("AWS_REGION") != null ? dotenv.get("AWS_REGION") : "us-east-1";
+
+        Map<String, String> env = EnvLoader.loadEnvFromJarDirectory(".env", true);
+
+        String awsAccessKeyId = env.get("AWS_ACCESS_KEY_ID");
+        String awsSecretAccessKey = env.get("AWS_SECRET_ACCESS_KEY");
+        System.out.println("AWS_ACCESS_KEY_ID: " + awsAccessKeyId);
+        System.out.println("AWS_SECRET_ACCESS_KEY: " + awsSecretAccessKey);
+
+
 
         AwsBasicCredentials awsCredentials = AwsBasicCredentials.create(awsAccessKeyId, awsSecretAccessKey);
 
