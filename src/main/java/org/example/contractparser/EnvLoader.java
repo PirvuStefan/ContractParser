@@ -15,8 +15,8 @@ public class EnvLoader {
         Map<String, String> env = loadEnvFromJarDirectory(".env", true);
 
         // Example usage
-        System.out.println("DB_HOST from map: " + env.get("AWS_ACCESS_KEY_ID"));
-        System.out.println("DB_HOST from System.getProperty: " + System.getProperty("AWS_SECRET_ACCESS_KEY"));
+        System.out.println("AWS_ACCESS from map: " + env.get("AWS_ACCESS_KEY_ID"));
+        System.out.println("AWS_SECRET System.getProperty: " + System.getProperty("AWS_SECRET_ACCESS_KEY"));
     }
 
     /**
@@ -79,9 +79,7 @@ public class EnvLoader {
         return envMap;
     }
 
-    /**
-     * Get the directory where the running JAR is located.
-     */
+
     private static File getJarDirectory() {
         try {
             // This assumes this class is loaded from the same JAR as your main app
@@ -104,9 +102,7 @@ public class EnvLoader {
         }
     }
 
-    /**
-     * Strip matching single or double quotes around a string.
-     */
+
     private static String stripQuotes(String s) {
         if (s.length() >= 2) {
             char first = s.charAt(0);
