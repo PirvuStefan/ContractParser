@@ -261,12 +261,6 @@ mvn clean package
 2. Check AWS Textract service is enabled in your region
 3. Verify network connectivity to AWS
 4. Check IAM user has Textract permissions
-///fsa
-### Issue: Generated documents are empty or have placeholders
-**Solution**: 
-1. Verify placeholder characters match exactly in templates
-2. Ensure templates are properly formatted Word documents (.docx)
-3. Check that all required fields are filled in the review page
 
 ### Issue: Application doesn't start
 **Solution**:
