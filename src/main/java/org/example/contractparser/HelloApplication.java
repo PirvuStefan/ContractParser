@@ -71,7 +71,7 @@ public class HelloApplication extends Application {
         VBox root = new VBox(20, fieldsBox, submitBox);
         root.setPadding(new Insets(30));
         root.setStyle("-fx-background-color: #e9ecef;");
-        Scene scene = new Scene(root, 400, 500);
+        Scene scene = new Scene(root, 400, 525);
 
         stage.setScene(scene);
         stage.show();
