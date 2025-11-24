@@ -222,7 +222,7 @@ public class DetectText {
                 System.out.println("judetul este: " + getBirthLocation(adress1, "judet"));
                 System.out.println("orasul este: " + getBirthLocation(adress1, "oras"));
 
-                if(!getAdressDetails(adress1, "strada").equals("nedefinit")){
+                if(!getAdressDetails(adress1, "strada").equals("-")){
                     textMap.put("Ɋ",getAdressDetails(adress1, "strada"));
                 }
                 else textMap.put("Ɋ",getAdressDetails(adress2, "strada")); // if the street is not in the first line try the second line
@@ -247,18 +247,6 @@ public class DetectText {
         word = word.substring(5);
         word = word.replaceAll("<+", " ").trim();
         word = word.replaceAll("\\s+", " ");
-        return word;
-
-    }
-
-    private String getCNP(String word){
-        word = word.trim();
-        char c = word.charAt(word.length() - 1);
-        // AX839941<58009702248M310803310126561
-        word = c + word.substring(13,19) + word.substring(29,35);
-
-
-
         return word;
 
     }
@@ -304,7 +292,7 @@ public class DetectText {
            }
        }
 
-        return "nedefinit";
+        return "-";
     }
 
     private String getAdressDetails(String adress, String type) {
@@ -336,7 +324,7 @@ public class DetectText {
                     return name;
                 }
             }
-            return "nedefinit";
+            return "-";
         }
 
 
@@ -357,7 +345,7 @@ public class DetectText {
             }
         }
 
-        return "nedefinit";
+        return "-";
     }
 
 
