@@ -11,6 +11,11 @@ public class ConfigToJarDir {
 
     public static void main(String[] args) throws Exception {
         File jarDir = getJarDir();
+        if( new File(jarDir, "config.yml").exists() ) {
+            System.out.println("Config already exists at: " + new File(jarDir, "config.yml").getAbsolutePath());
+            System.out.println("Skipping write.");
+            return;
+        }
         File config = new File(jarDir, "config.yml");
         try (PrintWriter pw = new PrintWriter(new FileWriter(config))) {
             pw.println("salary: 4800");
