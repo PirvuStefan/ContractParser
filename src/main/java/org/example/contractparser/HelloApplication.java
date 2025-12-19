@@ -47,12 +47,18 @@ public class HelloApplication extends Application {
         TextField cityField = new TextField();
         cityField.setPromptText("Oras");
 
+        ComboBox<String> selectBox = new ComboBox<>();
+        selectBox.getItems().addAll("Robest", "Amarillo", "Azzuro");
+        selectBox.setPromptText("Selecteaza compania");
+        selectBox.setMaxWidth(Double.MAX_VALUE);
+
         VBox fieldsBox = new VBox(15,
                 imageBox,
                 new Label("Numar de inregistrare:"), regNumberField,
                 new Label("Telefon:"), phoneField,
                 new Label("Locatie:"), placeField,
-                new Label("Oras:"), cityField
+                new Label("Oras:"), cityField,
+                new Label("Select:"), selectBox
         );
         fieldsBox.setPadding(new Insets(20));
         fieldsBox.setStyle("-fx-background-color: #f8f9fa; -fx-border-radius: 10; -fx-background-radius: 10;");
@@ -71,7 +77,7 @@ public class HelloApplication extends Application {
         VBox root = new VBox(20, fieldsBox, submitBox);
         root.setPadding(new Insets(30));
         root.setStyle("-fx-background-color: #e9ecef;");
-        Scene scene = new Scene(root, 400, 525);
+        Scene scene = new Scene(root, 400, 600);
 
         stage.setScene(scene);
         stage.show();
