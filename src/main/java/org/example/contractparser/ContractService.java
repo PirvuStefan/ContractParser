@@ -120,7 +120,7 @@ public class ContractService {
     }
 
 
-    public static void generateDocuments(String employeeName, Map<String, String> data) throws IOException {
+    public static void generateDocuments(String employeeName, Map<String, String> data, String template) throws IOException {
         ensureArhivaDirectory();
 
         String sanitizedName = employeeName.replace(" ", "_");
@@ -128,7 +128,7 @@ public class ContractService {
         File contractFile = new File(arhivaDir, sanitizedName + ".docx");
         File fisaFile = new File(arhivaDir, sanitizedName + "_fisa.docx");
 
-        // Create output files
+
         if (!contractFile.exists()) contractFile.createNewFile();
         if (!fisaFile.exists()) fisaFile.createNewFile();
 
@@ -156,6 +156,18 @@ public class ContractService {
             Contract.generateContract(tmpContract.getAbsolutePath(), contractFile.getAbsolutePath(), data);
             Contract.generateContract(tmpFisa.getAbsolutePath(), fisaFile.getAbsolutePath(), data);
         }
+    }
+
+    private static String getContractLocation(String template){
+        if(template.equals("Robest")) return "/contract.docx";
+        if(template.equals("Armarillo")) return "/contract_armarillo.docx";
+        return "/contract.docx";
+    }
+
+    private static String getFisaLocation(String template){
+        if(template.equals("Robest")) return "/fisa.docx";
+        if(template.equals("Armarillo")) return "/fisa_armarillo.docx";
+        return "/fisa.docx";
     }
 
 

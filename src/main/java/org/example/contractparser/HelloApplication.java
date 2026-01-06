@@ -20,6 +20,8 @@ import java.util.Map;
 public class HelloApplication extends Application {
     private ImageView imageView = new ImageView();
     private Stage primaryStage;
+    private String template;
+
 
     @Override
     public void start(Stage stage) {
@@ -101,6 +103,7 @@ public class HelloApplication extends Application {
 
             // Extract data from image if present
             Map<String, String> placeholders = new HashMap<>();
+            template = selectBox.getValue();
             if (imageView.getImage() != null) {
                 try {
                     String imagePath = imageView.getImage().getUrl().replaceFirst("^file:", "");
@@ -111,6 +114,7 @@ public class HelloApplication extends Application {
                     return;
                 }
             }
+            
 
             // Show review page
 //            showReviewPage(placeholders,
@@ -330,7 +334,7 @@ public class HelloApplication extends Application {
 
             // Generate documents
             try {
-                ContractService.generateDocuments(nameField.getText(), completeData);
+                ContractService.generateDocuments(nameField.getText(), completeData, template);
 
                 showSuccessAlert("Contracte generate",
                         "Contractul si Fisa au fost generate cu succes in folderul 'arhiva'.");
