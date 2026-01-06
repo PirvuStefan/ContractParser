@@ -133,8 +133,8 @@ public class ContractService {
         if (!fisaFile.exists()) fisaFile.createNewFile();
 
         // Load templates from resources and copy to temp files
-        try (InputStream contractTemplate = ContractService.class.getResourceAsStream("/contract.docx");
-             InputStream fisaTemplate = ContractService.class.getResourceAsStream("/fisa.docx")) {
+        try (InputStream contractTemplate = ContractService.class.getResourceAsStream(getContractLocation(template));
+             InputStream fisaTemplate = ContractService.class.getResourceAsStream(getFisaLocation(template))) {
 
             if (contractTemplate == null) {
                 throw new IOException("Resource `/contract.docx` not found in JAR");
@@ -161,13 +161,13 @@ public class ContractService {
     private static String getContractLocation(String template){
         if(template.equals("Robest")) return "/contract.docx";
         if(template.equals("Armarillo")) return "/contract_armarillo.docx";
-        return "/contract.docx";
+        return "/contract_azzuro.docx";
     }
 
     private static String getFisaLocation(String template){
         if(template.equals("Robest")) return "/fisa.docx";
         if(template.equals("Armarillo")) return "/fisa_armarillo.docx";
-        return "/fisa.docx";
+        return "/fisa_azzuro.docx";
     }
 
 
