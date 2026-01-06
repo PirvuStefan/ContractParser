@@ -41,9 +41,11 @@ build/
 .env
 .env.local
 
-contract.docx
-fisa.docx
-contract_armarillo.docx
-fisa_armarillo.docx
-contract_azzuro.docx
-fisa_azzuro.docx
+
+
+src/main/resources/contract.docx
+src/main/resources/fisa.docx
+src/main/resources/contract_armarillo.docx
+src/main/resources/fisa_armarillo.docx
+src/main/resources/contract_azzuro.docx
+src/main/resources/fisa_azzuro.docx
