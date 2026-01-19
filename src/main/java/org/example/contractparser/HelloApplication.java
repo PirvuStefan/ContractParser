@@ -98,6 +98,11 @@ public class HelloApplication extends Application {
                 return;
             }
 
+            if(selectBox.getValue() == null) {
+                showErrorAlert("Validation Error", "Te rog selecteaza o companie.");
+                return;
+            }
+
             // Ensure arhiva directory exists
             ContractService.ensureArhivaDirectory();
 
