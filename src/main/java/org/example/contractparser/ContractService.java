@@ -166,7 +166,7 @@ public class ContractService {
 
     private static String getFisaLocation(String template){
         if(template.equals("Robest")) return "/fisa.docx";
-        if(template.equals("Armarillo")) return "/fisa_armarillo.docx";
+        if(template.equals("Amarillo")) return "/fisa_armarillo.docx";
         return "/fisa_azzuro.docx";
     }
 
