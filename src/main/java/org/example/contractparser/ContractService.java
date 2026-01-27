@@ -160,7 +160,7 @@ public class ContractService {
 
     private static String getContractLocation(String template){
         if(template.equals("Robest")) return "/contract.docx";
-        if(template.equals("Armarillo")) return "/contract_armarillo.docx";
+        if(template.equals("Amarillo")) return "/contract_armarillo.docx";
         return "/contract_azzuro.docx";
     }
 
