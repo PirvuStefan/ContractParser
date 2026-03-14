@@ -2,20 +2,6 @@
 
 A JavaFX desktop application that automates the generation of employment contracts and employee information sheets (fisa) by extracting text from Romanian ID cards using AWS Textract OCR technology.
 
-## 📋 Table of Contents
-- [Features](#features)
-- [Prerequisites](#prerequisites)
-- [Technologies Used](#technologies-used)
-- [Project Structure](#project-structure)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Building the Application](#building-the-application)
-- [Running the Application](#running-the-application)
-- [Usage](#usage)
-- [AWS Textract Setup](#aws-textract-setup)
-- [Troubleshooting](#troubleshooting)
-- [License](#license)
-
 ## ✨ Features
 
 - **ID Card OCR Recognition**: Automatically extracts information from Romanian ID cards (JPG/PNG) using AWS Textract
@@ -255,6 +241,8 @@ If you don't have one, sign up at [aws.amazon.com](https://aws.amazon.com)
 mvn clean package
 ```
 
+> **Note:** The application relies on the presence of `contract.docx` and `fisa.docx` in the resources directory. If these files are missing, the application will throw a "Resource not found" error when trying to access them.
+
 ### Issue: Submit button doesn't extract text from ID
 **Solution**: 
 1. Verify `.env` file exists with valid AWS credentials
@@ -271,7 +259,7 @@ mvn clean package
 ### Issue: Config file not found when running JAR
 **Solution**: The application automatically creates `config.yml` in the same directory as the JAR file on first run. If issues persist, manually create it:
 ```yaml
-salary: 4800
+salary: 4050
 ```
 
 ## 📝 Development Notes
