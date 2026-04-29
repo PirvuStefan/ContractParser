@@ -26,7 +26,7 @@ public class ContractService {
     private static final String ARHIVA_DIR = "arhiva";
     private static final String CONFIG_FILE = "config.yml";
     private static final int DEFAULT_SALARY = 4050;
-    private static final String DATE_FORMAT = "dd.MM.yyyy";
+    static final String DATE_FORMAT = "dd.MM.yyyy";
 
     protected Map<String, String> extractedData;
 
@@ -34,7 +34,13 @@ public class ContractService {
         IdType typeParse = type ? IdType.NEWID : IdType.OLDID;
 
         UserMapParser parser = IdFactory.createIdParser(typeParse);
-        this.extractedData =parser.extractMap(imagePath);
+        this.extractedData = parser.extractMap(imagePath);
+
+        System.out.println("\n\n\n\n");
+
+        for(Map.Entry<String, String> entry : this.extractedData.entrySet()){
+            System.out.println("Key: " + entry.getKey() + " Value: " + entry.getValue());
+        }
 
 
 
@@ -119,7 +125,7 @@ public class ContractService {
         int salary = getSalaryFromConfig();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
         String today = LocalDate.now().format(formatter);
-        String hireDay = LocalDate.now().plusDays(1).format(formatter);
+        String hireDay = HireDay.getHireDay();
         String formattedPhone = formatPhoneNumber(phone);
 
         // Add additional data to extracted data

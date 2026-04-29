@@ -124,15 +124,6 @@ public class HelloApplication extends Application {
                     return;
                 }
             }
-            
-
-            // Show review page
-//            showReviewPage(placeholders,
-//                regNumberField.getText(),
-//                phoneField.getText(),
-//                placeField.getText(),
-//                cityField.getText()
-//            );
 
             showDetailedReviewPage(placeholders,
                 regNumberField.getText(),

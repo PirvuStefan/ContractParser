@@ -14,18 +14,10 @@ public class EnvLoader {
     public static void main(String[] args) {
         Map<String, String> env = loadEnvFromJarDirectory(".env", true);
 
-        // Example usage
         System.out.println("AWS_ACCESS from map: " + env.get("AWS_ACCESS_KEY_ID"));
         System.out.println("AWS_SECRET System.getProperty: " + System.getProperty("AWS_SECRET_ACCESS_KEY"));
     }
 
-    /**
-     * Load a .env file from the directory where the running JAR is located.
-     *
-     * @param envFileName    Name of the .env file (e.g. ".env")
-     * @param setSystemProps If true, also set System properties for each key/value
-     * @return Map of loaded environment variables
-     */
     public static Map<String, String> loadEnvFromJarDirectory(String envFileName, boolean setSystemProps) {
         Map<String, String> envMap = new HashMap<>();
 
