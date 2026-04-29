@@ -1,5 +1,6 @@
 package org.example.contractparser.procesing;
 
+import org.example.contractparser.ContractField;
 import org.example.contractparser.DetectText;
 
 import java.io.IOException;
@@ -22,30 +23,29 @@ public class OldId implements UserMapParser {
             String word = textBlocks.get(i).trim();
 
             if(word.contains("<<")){
-                textMap.put("ɛ", getName(word));
+                textMap.put(ContractField.NAME.getPlaceholder(), getName(word));
                 System.out.println("Numele este: " + getName(word));
-
 
             }
             else if(word.contains("CNP")){
                 word = word.replaceAll("CNP", "").trim();
-                textMap.put("ɞ", word);
+                textMap.put(ContractField.CNP.getPlaceholder(), word);
                 System.out.println("CNP-ul este: " + word);
-                textMap.put("ȕ", getBirthDate( word ));
-                System.out.println("Data nasterii este: " + getBirthDate( word ));
+                textMap.put(ContractField.BIRTH_DATE.getPlaceholder(), getBirthDate(word));
+                System.out.println("Data nasterii este: " + getBirthDate(word));
             }
             else if(word.contains("<")){
                 word = word.trim();
-                textMap.put("ɜ", word.substring(0,2));
-                textMap.put("ɝ", word.substring(2,8));
+                textMap.put(ContractField.SERIES.getPlaceholder(), word.substring(0, 2));
+                textMap.put(ContractField.NUMBER.getPlaceholder(), word.substring(2, 8));
                 // here we can also put the cnp if needed
-                System.out.println("Seria este: " + word.substring(0,2));
-                System.out.println("Numarul este: " + word.substring(2,8));
+                System.out.println("Seria este: " + word.substring(0, 2));
+                System.out.println("Numarul este: " + word.substring(2, 8));
 
             }
             else if(word.contains("SPCLEP")){
                 word = word.trim();
-                textMap.put("ɟ",word);
+                textMap.put(ContractField.ISSUED_BY.getPlaceholder(), word);
                 System.out.println("Eliberat de: " + word);
 
             }
@@ -55,9 +55,8 @@ public class OldId implements UserMapParser {
                 System.out.println("Locul nasterii este: " + getBirthLocation(place, "judet"));
                 System.out.println("Locul nasterii este: " + getBirthLocation(place, "country"));
                 // now we need to put here for the placeholder of judet and country if needed
-                textMap.put("Ȣ", getBirthLocation(place, "judet"));
-                textMap.put("Ȥ", getBirthLocation(place, "country"));
-
+                textMap.put(ContractField.BIRTH_PLACE.getPlaceholder(), getBirthLocation(place, "judet"));
+                textMap.put(ContractField.BIRTH_COUNTRY.getPlaceholder(), getBirthLocation(place, "country"));
 
             } /// TODO : make a way to extract the birth place because it might have a lot of edge cases
             else if(word.contains("Adresse") || word.contains("Adress") || word.contains("Domiciliu")){
@@ -70,23 +69,24 @@ public class OldId implements UserMapParser {
                 System.out.println("etajul este: " + getAdressDetails(adress2, "etaj"));
                 System.out.println("apartamentul este: " + getAdressDetails(adress2, "apartment"));
 
-                textMap.put("Ƚ",getBirthLocation(adress1, "judet"));
-                textMap.put("ʦ", getBirthLocation(adress1, "localitate"));
-                textMap.put("ɠ", adress1 + " " + adress2);
-                textMap.put("ʠ", getAdressDetails(adress2, "bloc"));
-                textMap.put("ʡ", getAdressDetails(adress2, "numar"));
-                textMap.put("ʢ", getAdressDetails(adress2, "scara"));
-                textMap.put("ʣ", getAdressDetails(adress2, "etaj"));
-                textMap.put("ʤ", getAdressDetails(adress2, "apartment"));
+                textMap.put(ContractField.ADDRESS_COUNTY.getPlaceholder(), getBirthLocation(adress1, "judet"));
+                textMap.put(ContractField.ADDRESS_CITY.getPlaceholder(), getBirthLocation(adress1, "localitate"));
+                textMap.put(ContractField.ADDRESS.getPlaceholder(), adress1 + " " + adress2);
+                textMap.put(ContractField.ADDRESS_BLOC.getPlaceholder(), getAdressDetails(adress2, "bloc"));
+                textMap.put(ContractField.ADDRESS_NUMBER.getPlaceholder(), getAdressDetails(adress2, "numar"));
+                textMap.put(ContractField.ADDRESS_SCARA.getPlaceholder(), getAdressDetails(adress2, "scara"));
+                textMap.put(ContractField.ADDRESS_ETAJ.getPlaceholder(), getAdressDetails(adress2, "etaj"));
+                textMap.put(ContractField.ADDRESS_APARTMENT.getPlaceholder(), getAdressDetails(adress2, "apartment"));
 
                 System.out.println("strada este: " + getAdressDetails(adress1, "strada"));
                 System.out.println("judetul este: " + getBirthLocation(adress1, "judet"));
                 System.out.println("orasul este: " + getBirthLocation(adress1, "oras"));
 
-                if(!getAdressDetails(adress1, "strada").equals("-")){
-                    textMap.put("Ɋ",getAdressDetails(adress1, "strada"));
+                if (!getAdressDetails(adress1, "strada").equals("-")) {
+                    textMap.put(ContractField.ADDRESS_STREET.getPlaceholder(), getAdressDetails(adress1, "strada"));
+                } else {
+                    textMap.put(ContractField.ADDRESS_STREET.getPlaceholder(), getAdressDetails(adress2, "strada")); // if the street is not in the first line try the second line
                 }
-                else textMap.put("Ɋ",getAdressDetails(adress2, "strada")); // if the street is not in the first line try the second line
                 i = i + 2;
             }
             else if(word.contains("Valabilitate") || word.contains("Validity") || word.contains("Validite")){
@@ -96,7 +96,7 @@ public class OldId implements UserMapParser {
                     date = date.substring(0, dashIndex).trim();
                 }
                 System.out.println("Data este: " + date);
-                textMap.put("ɣ", date);
+                textMap.put(ContractField.VALIDITY.getPlaceholder(), date);
             }
         }
 

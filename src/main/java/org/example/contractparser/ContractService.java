@@ -129,13 +129,13 @@ public class ContractService {
         String formattedPhone = formatPhoneNumber(phone);
 
         // Add additional data to extracted data
-        extractedData.put("ɔ", regNumber);      // Registration Number
-        extractedData.put("ɖ", today);          // Today's Date
-        extractedData.put("ɐ", hireDay);        // Hire Date
-        extractedData.put("ɕ", formattedPhone); // Phone
-        extractedData.put("ɘ", place);          // Location
-        extractedData.put("ə", city);           // City
-        extractedData.put("ɥ", String.valueOf(salary)); // Salary
+        extractedData.put(ContractField.REGISTRATION_NUMBER.getPlaceholder(), regNumber);
+        extractedData.put(ContractField.TODAY_DATE.getPlaceholder(), today);
+        extractedData.put(ContractField.HIRE_DATE.getPlaceholder(), hireDay);
+        extractedData.put(ContractField.PHONE.getPlaceholder(), formattedPhone);
+        extractedData.put(ContractField.LOCATION.getPlaceholder(), place);
+        extractedData.put(ContractField.CITY.getPlaceholder(), city);
+        extractedData.put(ContractField.SALARY.getPlaceholder(), String.valueOf(salary));
 
         return extractedData;
     }

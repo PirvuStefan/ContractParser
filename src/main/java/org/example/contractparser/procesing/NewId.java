@@ -1,5 +1,6 @@
 package org.example.contractparser.procesing;
 
+import org.example.contractparser.ContractField;
 import org.example.contractparser.DetectText;
 
 import java.io.IOException;
@@ -26,36 +27,36 @@ public class NewId implements UserMapParser{
             // This may involve checking for specific keywords or patterns in the text blocks
 
             if(word.contains("CNP:")){
-                textMap.put("ɞ", getStringInLine("CNP:", word, textBlocks.get(i+1)));
-                System.out.println("CNP-ul este: " + textMap.get("ɞ"));
+                textMap.put(ContractField.CNP.getPlaceholder(), getStringInLine("CNP:", word, textBlocks.get(i+1)));
+                System.out.println("CNP-ul este: " + textMap.get(ContractField.CNP.getPlaceholder()));
 
             }
             else if(word.contains("Data nasterii:")){
-                textMap.put("ȕ", getStringInLine("Data nasterii:", word, textBlocks.get(i+1)));
+                textMap.put(ContractField.BIRTH_DATE.getPlaceholder(), getStringInLine("Data nasterii:", word, textBlocks.get(i+1)));
             }
             else if(word.contains("Locul nasterii:")){
-                textMap.put("Ȣ", getStringInLine("Locul nasterii:", word, textBlocks.get(i+1)));
+                textMap.put(ContractField.BIRTH_PLACE.getPlaceholder(), getStringInLine("Locul nasterii:", word, textBlocks.get(i+1)));
             }
-             else if(word.contains("Numar document")){
-                textMap.put("ɝ", getStringInLine("Numar document:", word, textBlocks.get(i+1)));
+            else if(word.contains("Numar document")){
+                textMap.put(ContractField.NUMBER.getPlaceholder(), getStringInLine("Numar document:", word, textBlocks.get(i+1)));
             }
-             else if(word.contains("Autoritatea")){
-                textMap.put("ɟ", textBlocks.get(i+1));
+            else if(word.contains("Autoritatea")){
+                textMap.put(ContractField.ISSUED_BY.getPlaceholder(), textBlocks.get(i+1));
             }
-             if(word.contains("Nume de familie:")){
-                 name[0] = getStringInLine("Nume de familie:", word, textBlocks.get(i+1));
-             }
-             if(word.contains("Prenume:")){
-                 name[1] = getStringInLine("Prenume:", word, textBlocks.get(i+1));
-             }
-             if(word.contains("Domiciliu:")){
-                 textMap.put("ɠ", textBlocks.get(i+1));
-             }
+            if(word.contains("Nume de familie:")){
+                name[0] = getStringInLine("Nume de familie:", word, textBlocks.get(i+1));
+            }
+            if(word.contains("Prenume:")){
+                name[1] = getStringInLine("Prenume:", word, textBlocks.get(i+1));
+            }
+            if(word.contains("Domiciliu:")){
+                textMap.put(ContractField.ADDRESS.getPlaceholder(), textBlocks.get(i+1));
+            }
         }
 
 
-        textMap.put("ɛ", name[0] + " " + name[1]);
-        System.out.println("Numele este: " + textMap.get("ɛ"));
+        textMap.put(ContractField.NAME.getPlaceholder(), name[0] + " " + name[1]);
+        System.out.println("Numele este: " + textMap.get(ContractField.NAME.getPlaceholder()));
         return textMap;
     }
 
