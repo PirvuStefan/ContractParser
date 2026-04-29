@@ -49,6 +49,8 @@ public class HelloApplication extends Application {
         TextField cityField = new TextField();
         cityField.setPromptText("Oras");
 
+        CheckBox digitalIdCheckbox = new CheckBox("Buletin digital");
+
         ComboBox<String> selectBox = new ComboBox<>();
         selectBox.getItems().addAll("Robest", "Amarillo", "Azzuro");
         selectBox.setPromptText("Selecteaza compania");
@@ -60,6 +62,7 @@ public class HelloApplication extends Application {
                 new Label("Telefon:"), phoneField,
                 new Label("Locatie:"), placeField,
                 new Label("Oras:"), cityField,
+                digitalIdCheckbox,
                 new Label("Select:"), selectBox
         );
         fieldsBox.setPadding(new Insets(20));
@@ -112,7 +115,9 @@ public class HelloApplication extends Application {
             if (imageView.getImage() != null) {
                 try {
                     String imagePath = imageView.getImage().getUrl().replaceFirst("^file:", "");
-                    placeholders = ContractService.extractDataFromImage(imagePath);
+                    //placeholders = ContractService.extractDataFromImage(imagePath);
+                    ContractService contractService = new ContractService(digitalIdCheckbox.isSelected(), imagePath);
+                    placeholders = contractService.getData();
                 } catch (IOException ex) {
                     showErrorAlert("Extraction Error",
                         "Failed to extract data from ID card: " + ex.getMessage());

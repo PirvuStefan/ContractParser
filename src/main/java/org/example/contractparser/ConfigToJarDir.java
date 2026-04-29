@@ -18,7 +18,7 @@ public class ConfigToJarDir {
         }
         File config = new File(jarDir, "config.yml");
         try (PrintWriter pw = new PrintWriter(new FileWriter(config))) {
-            pw.println("salary: 4800");
+            pw.println("salary: 4050");
         }
         System.out.println("Wrote config to: " + config.getAbsolutePath());
         System.out.println("Current working dir (user.dir): " + System.getProperty("user.dir"));

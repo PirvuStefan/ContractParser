@@ -1,5 +1,9 @@
 package org.example.contractparser;
 
+import org.example.contractparser.procesing.IdType;
+import org.example.contractparser.procesing.IdFactory;
+import org.example.contractparser.procesing.UserMapParser;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,6 +27,22 @@ public class ContractService {
     private static final String CONFIG_FILE = "config.yml";
     private static final int DEFAULT_SALARY = 4050;
     private static final String DATE_FORMAT = "dd.MM.yyyy";
+
+    protected Map<String, String> extractedData;
+
+    ContractService(boolean type, String  imagePath) throws IOException {
+        IdType typeParse = type ? IdType.NEWID : IdType.OLDID;
+
+        UserMapParser parser = IdFactory.createIdParser(typeParse);
+        this.extractedData =parser.extractMap(imagePath);
+
+
+
+    }
+
+    protected Map< String, String > getData(){
+        return this.extractedData;
+    }
 
 
     public static void initializeConfig() {
@@ -86,12 +106,7 @@ public class ContractService {
     }
 
 
-    public static Map<String, String> extractDataFromImage(String imagePath) throws IOException {
-        if (imagePath == null || imagePath.isEmpty()) {
-            return new HashMap<>();
-        }
-        return new DetectText().extractMap(imagePath);
-    }
+
 
 
     public static Map<String, String> buildCompleteDataMap(
